@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="800.0" prefWidth="802.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.tela_barraquinha.controllers.TelalistasController">
+
+    <children>
+
+        <Label layoutX="268.0" layoutY="31.0" text="Lista de frutas" underline="true">
+            <font>
+                <Font name="System Bold" size="40.0" />
+            </font>
+        </Label>
+
+        <TableView fx:id="tabela_frutas" layoutY="128.0" prefHeight="583.0" prefWidth="802.0">
+
+            <columns>
+                <TableColumn fx:id="col_NomeCliente" prefWidth="348.0" text="Cliente" />
+                <TableColumn fx:id="col_NomeFruta" prefWidth="229.0" text="Fruta" />
+                <TableColumn fx:id="col_Estado" prefWidth="122.0" text="Estado" />
+            <TableColumn fx:id="col_Quant" prefWidth="102.0" text="Quantidade" />
+            </columns>
+
+        </TableView>
+
+        <Button fx:id="btn_sair" layoutX="61.0" layoutY="736.0" onAction="#sair" text="Sair" textFill="RED" />
+
+        <Button fx:id="btn_voltar" layoutX="642.0" layoutY="736.0" onAction="#voltarMenu" text="Voltar ao menu" />
+
+    </children>
+</AnchorPane>
