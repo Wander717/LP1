@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="800.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.tela_barraquinha.MenuController">
+
+   <children>
+
+      <ImageView fitHeight="186.0" fitWidth="201.0"
+                 layoutX="207.0" layoutY="99.0"
+                 pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../frutinhas.png" />
+         </image>
+      </ImageView>
+
+      <Label layoutX="255.0" layoutY="26.0" text="Menu" underline="true">
+         <font>
+            <Font size="35.0" />
+         </font>
+      </Label>
+
+      <TextField fx:id="txtfield_nome"
+                 layoutX="173.0" layoutY="340.0"
+                 prefHeight="25.0" prefWidth="251.0"
+                 promptText="Digite o seu nome aqui..." />
+
+      <Button fx:id="btn_cadastrar_nome"
+              layoutX="244.0" layoutY="400.0"
+              text="Cadastrar nome"
+              onAction="#cadastrarNome"/>
+
+      <Button fx:id="btn_ver_lista"
+              layoutX="207.0" layoutY="588.0"
+              prefHeight="35.0" prefWidth="186.0"
+              text="Ver lista de frutas"
+              onAction="#irParaLista"/>
+
+      <Button fx:id="btn_sair"
+              layoutX="282.0" layoutY="735.0"
+              text="Sair"
+              textFill="RED"
+              onAction="#sair"/>
+
+   </children>
+</AnchorPane>

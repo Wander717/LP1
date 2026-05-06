@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CONTROLLER_NAME">
+   <children>
+      <Label layoutX="187.0" layoutY="20.0" text="Controle de gastos">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+      <TableView layoutY="141.0" prefHeight="505.0" prefWidth="606.0">
+        <columns>
+          <TableColumn prefWidth="237.0" text="Produto" />
+          <TableColumn prefWidth="271.0" text="Tipo" />
+            <TableColumn prefWidth="97.0" text="Quant." />
+        </columns>
+      </TableView>
+      <Label layoutX="30.0" layoutY="71.0" text="Funcionário: " />
+      <Label layoutX="30.0" layoutY="99.0" text="Cliente:" />
+      <Label layoutX="98.0" layoutY="71.0" prefHeight="17.0" prefWidth="380.0" />
+      <Label layoutX="76.0" layoutY="99.0" prefHeight="17.0" prefWidth="380.0" />
+      <Button layoutX="240.0" layoutY="685.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="127.0" text="Voltar" />
+   </children>
+</AnchorPane>
