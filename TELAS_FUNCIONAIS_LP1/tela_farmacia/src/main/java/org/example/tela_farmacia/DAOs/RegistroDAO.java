@@ -65,10 +65,32 @@ public class RegistroDAO {
         try (PreparedStatement stmt = conexao.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                Cliente c = new Cliente(rs.getString("nome_cliente"), rs.getInt("idade_cliente"), rs.getInt("id_cliente"));
-                Funcionario f = new Funcionario(rs.getString("nome_funcionario"), rs.getString("cargo_funcionario"), rs.getInt("id_funcionario"));
-                Remedio r = new Remedio(rs.getString("nome_remedio"), rs.getString("tipo_remedio"), rs.getInt("quantidade_remedio"), rs.getInt("id_remedio"));
-                lista.add(new Registro(c, f, r));
+
+                int idRegistro = rs.getInt("id_registro"); // 👈 AQUI está o valor correto
+
+                Cliente c = new Cliente(
+                        rs.getString("nome_cliente"),
+                        rs.getInt("idade_cliente"),
+                        rs.getInt("id_cliente")
+                );
+
+                Funcionario f = new Funcionario(
+                        rs.getString("nome_funcionario"),
+                        rs.getString("cargo_funcionario"),
+                        rs.getInt("id_funcionario")
+                );
+
+                Remedio r = new Remedio(
+                        rs.getString("nome_remedio"),
+                        rs.getString("tipo_remedio"),
+                        rs.getInt("quantidade_remedio"),
+                        rs.getInt("id_remedio")
+                );
+
+                Registro reg = new Registro(c, f, r);
+                reg.setId(idRegistro);
+
+                lista.add(reg);
             }
         }
         return lista;

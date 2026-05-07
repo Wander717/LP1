@@ -10,11 +10,7 @@ public class DatabaseConnection {
     private static final String USER = "root";
     private static final String PASS = "root";
 
-    public static Connection getConnection() {
-        try {
-            return DriverManager.getConnection(URL, USER, PASS);
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao conectar ao banco: " + e.getMessage(), e);
-        }
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASS);
     }
 }

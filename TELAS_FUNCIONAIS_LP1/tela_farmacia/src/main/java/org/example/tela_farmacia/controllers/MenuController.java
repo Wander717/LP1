@@ -46,7 +46,8 @@ public class MenuController {
             Funcionario funcionario = new Funcionario(txt_NomeFuncionario.getText(), "Atendente", 0);
             Remedio remedio = new Remedio(txt_NomeRemedio.getText(), txt_TipoRemedio.getText(), spi_QuantRemedio.getValue(), 0);
 
-            registroDAO.salvarTudoNoBanco(new Registro(cliente, funcionario, remedio));
+            Registro registro = new Registro(cliente, funcionario, remedio);
+            registroDAO.salvarTudoNoBanco(registro);
 
             mostrarAlerta("Sucesso", "Dados salvos com sucesso!", Alert.AlertType.INFORMATION);
             limparCampos();
