@@ -3,8 +3,6 @@ package org.example.tela_salao.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.SpinnerValueFactory;
-import org.example.tela_salao.DAOs.EntidadesDAO;
-import org.example.tela_salao.entidades.Salao;
 
 public class MenuController {
 
