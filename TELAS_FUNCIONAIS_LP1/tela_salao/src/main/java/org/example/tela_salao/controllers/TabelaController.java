@@ -4,6 +4,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.example.tela_salao.DAOs.ClienteDAO;
+import org.example.tela_salao.DAOs.FuncionarioDAO;
+import org.example.tela_salao.DAOs.ProdutoDAO;
 
 public class TabelaController {
 
@@ -28,7 +31,9 @@ public class TabelaController {
     @FXML
     private Button brnVoltar;
 
-    private EntidadesDAO dao = new EntidadesDAO();
+    private ClienteDAO cliente = new ClienteDAO();
+    private FuncionarioDAO funcionario = new FuncionarioDAO();
+    private ProdutoDAO produto = new ProdutoDAO();
 
     @FXML
     public void initialize() {

@@ -3,6 +3,9 @@ package org.example.tela_salao.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.SpinnerValueFactory;
+import org.example.tela_salao.DAOs.ClienteDAO;
+import org.example.tela_salao.DAOs.FuncionarioDAO;
+import org.example.tela_salao.DAOs.ProdutoDAO;
 
 public class MenuController {
 
@@ -27,48 +30,17 @@ public class MenuController {
     @FXML
     private Button btn_Tabela;
 
-    private EntidadesDAO dao = new EntidadesDAO();
+    private ClienteDAO cliente = new ClienteDAO;
+    private FuncionarioDAO funcionario = new FuncionarioDAO;
+    private ProdutoDAO produto = new ProdutoDAO;
 
     @FXML
     public void initialize() {
+        limparCampos();
         SpinnerValueFactory<Integer> valueFactory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 1);
 
         spin_Quantidade.setValueFactory(valueFactory);
-    }
-
-    @FXML
-    private void Cadastrar() {
-
-        try {
-            String funcionario = txt_NomeFuncionario.getText();
-            String cliente = txt_NomeCliente.getText();
-            String produto = txt_Produto.getText();
-            String tipo = txt_TipoProduto.getText();
-            int quantidade = spin_Quantidade.getValue();
-
-            if (funcionario.isEmpty() || cliente.isEmpty() || produto.isEmpty() || tipo.isEmpty()) {
-                mostrarAlerta("Erro", "Preencha todos os campos!");
-                return;
-            }
-
-            Salao e = new Salao(
-                    funcionario,
-                    cliente,
-                    produto,
-                    tipo,
-                    quantidade
-            );
-
-            dao.inserir(e);
-
-            mostrarAlerta("Sucesso", "Registro salvo no banco!");
-
-            limparCampos();
-
-        } catch (Exception ex) {
-            mostrarAlerta("Erro", "Erro ao cadastrar!");
-        }
     }
 
     @FXML
