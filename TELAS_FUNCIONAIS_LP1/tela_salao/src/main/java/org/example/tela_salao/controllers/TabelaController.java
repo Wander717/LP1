@@ -4,32 +4,43 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.tela_salao.DAOs.ClienteDAO;
 import org.example.tela_salao.DAOs.FuncionarioDAO;
 import org.example.tela_salao.DAOs.ProdutoDAO;
+import org.example.tela_salao.DTO.RegistroTabelaDTO;
 
 public class TabelaController {
 
     @FXML
-    private TableView<Salao> tabelaGastos;
+    private TableView<RegistroTabelaDTO> tabelaGastos;
 
     @FXML
-    private TableColumn<Salao, String> colunaFuncionario;
+    private TableColumn<RegistroTabelaDTO, Integer> colunaId;
 
     @FXML
-    private TableColumn<Salao, String> colunaCliente;
+    private TableColumn<RegistroTabelaDTO, String> colunaFuncionario;
 
     @FXML
-    private TableColumn<Salao, String> colunaProduto;
+    private TableColumn<RegistroTabelaDTO, String> colunaCliente;
 
     @FXML
-    private TableColumn<Salao, String> colunaTipo;
+    private TableColumn<RegistroTabelaDTO, String> colunaProduto;
 
     @FXML
-    private TableColumn<Salao, Integer> colunaQuantidade;
+    private TableColumn<RegistroTabelaDTO, String> colunaTipo;
 
     @FXML
-    private Button brnVoltar;
+    private TableColumn<RegistroTabelaDTO, Integer> colunaQuantidade;
+
+    @FXML
+    private Button btn_Voltar;
+
+    @FXML
+    private Button btn_Excluir;
+
+    @FXML
+    private Button btn_Editar;
 
     private ClienteDAO cliente = new ClienteDAO();
     private FuncionarioDAO funcionario = new FuncionarioDAO();
@@ -37,34 +48,45 @@ public class TabelaController {
 
     @FXML
     public void initialize() {
+        @FXML
+        public void initialize() {
 
-        colunaFuncionario.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(data.getValue().getNome_funcionario()));
+            colunaId.setCellValueFactory(
+                    new PropertyValueFactory<>("id")
+            );
 
-        colunaCliente.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(data.getValue().getNome_cliente()));
+            colunaFuncionario.setCellValueFactory(
+                    new PropertyValueFactory<>("funcionario")
+            );
 
-        colunaProduto.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(data.getValue().getProduto()));
+            colunaCliente.setCellValueFactory(
+                    new PropertyValueFactory<>("cliente")
+            );
 
-        colunaTipo.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(data.getValue().getTipo_produto()));
+            colunaProduto.setCellValueFactory(
+                    new PropertyValueFactory<>("produto")
+            );
 
-        colunaQuantidade.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleIntegerProperty(data.getValue().getQuantidade_produto()).asObject());
+            colunaTipo.setCellValueFactory(
+                    new PropertyValueFactory<>("tipo")
+            );
 
-        carregarTabela();
+            colunaQuantidade.setCellValueFactory(
+                    new PropertyValueFactory<>("quantidade")
+            );
+
+            carregarTabela();
+        }
+
+
     }
 
     private void carregarTabela() {
-        ObservableList<Salao> lista =
-                FXCollections.observableArrayList(dao.listar());
 
-        tabelaGastos.setItems(lista);
     }
 
     @FXML
-    private void VoltarMenu() {
+    private void voltarMenu() {
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
                     getClass().getResource("/Tela_Menu.fxml")
@@ -73,7 +95,7 @@ public class TabelaController {
             javafx.scene.Parent root = loader.load();
 
             javafx.stage.Stage stage =
-                    (javafx.stage.Stage) brnVoltar.getScene().getWindow();
+                    (javafx.stage.Stage) btn_Voltar.getScene().getWindow();
 
             stage.setScene(new javafx.scene.Scene(root));
 

@@ -16,13 +16,16 @@
       </Label>
       <TableView fx:id="tabelaGastos" layoutY="141.0" prefHeight="505.0" prefWidth="1141.0">
         <columns>
-          <TableColumn fx:id="colunaFuncionario" prefWidth="248.0" text="Funcionário" />
-            <TableColumn fx:id="colunaCliente" prefWidth="288.0" text="Cliente" />
+            <TableColumn fx:id="colunaId" prefWidth="61.0" text="ID" />
+            <TableColumn fx:id="colunaFuncionario" prefWidth="225.0" text="Funcionário" />
+            <TableColumn fx:id="colunaCliente" prefWidth="250.0" text="Cliente" />
             <TableColumn fx:id="colunaProduto" prefWidth="300.0" text="Produto" />
             <TableColumn fx:id="colunaTipo" prefWidth="213.0" text="Tipo" />
             <TableColumn fx:id="colunaQuantidade" prefWidth="91.0" text="Quant." />
         </columns>
       </TableView>
-      <Button fx:id="brnVoltar" layoutX="510.0" layoutY="680.0" mnemonicParsing="false" onAction="#VoltarMenu" prefHeight="50.0" prefWidth="127.0" text="Voltar" />
+      <Button fx:id="btn_Voltar" layoutX="510.0" layoutY="680.0" mnemonicParsing="false" onAction="#voltarMenu" prefHeight="50.0" prefWidth="127.0" text="Voltar" />
+      <Button fx:id="btn_Editar" layoutX="907.0" layoutY="680.0" mnemonicParsing="false" onAction="#editarItemSelecionado" prefHeight="50.0" prefWidth="163.0" text="Editar Item selecionado" />
+      <Button fx:id="btn_Excluir" layoutX="88.0" layoutY="680.0" mnemonicParsing="false" onAction="#excluirLinhaSelecionada" prefHeight="50.0" prefWidth="176.0" text="Excluir Registro selecionado" />
    </children>
 </AnchorPane>
