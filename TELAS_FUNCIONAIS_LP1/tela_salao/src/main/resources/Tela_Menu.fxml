@@ -21,7 +21,7 @@
             <Image url="@icone.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnCadastrar" layoutX="243.0" layoutY="577.0" mnemonicParsing="false" onAction="#Cadastrar" prefHeight="59.0" prefWidth="114.0" text="Cadastrar Tudo" />
+      <Button fx:id="btn_Cadastrar" layoutX="240.0" layoutY="608.0" mnemonicParsing="false" onAction="#cadastrarTudo" prefHeight="59.0" prefWidth="114.0" text="Cadastrar Tudo" />
       <TextField fx:id="txt_NomeFuncionario" layoutX="128.0" layoutY="239.0" prefHeight="25.0" prefWidth="338.0" />
       <TextField fx:id="txt_NomeCliente" layoutX="128.0" layoutY="294.0" prefHeight="25.0" prefWidth="338.0" />
       <Label layoutX="131.0" layoutY="222.0" text="Nome do funcionário" />

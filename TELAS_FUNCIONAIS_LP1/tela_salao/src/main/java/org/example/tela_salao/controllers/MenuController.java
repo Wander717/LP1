@@ -3,9 +3,10 @@ package org.example.tela_salao.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.SpinnerValueFactory;
-import org.example.tela_salao.DAOs.ClienteDAO;
-import org.example.tela_salao.DAOs.FuncionarioDAO;
-import org.example.tela_salao.DAOs.ProdutoDAO;
+import org.example.tela_salao.DAOs.*;
+import org.example.tela_salao.entidades.*;
+
+import java.sql.SQLException;
 
 public class MenuController {
 
@@ -25,14 +26,14 @@ public class MenuController {
     private Spinner<Integer> spin_Quantidade;
 
     @FXML
-    private Button btnCadastrar;
+    private Button btn_Cadastrar;
 
     @FXML
     private Button btn_Tabela;
 
-    private ClienteDAO cliente = new ClienteDAO;
-    private FuncionarioDAO funcionario = new FuncionarioDAO;
-    private ProdutoDAO produto = new ProdutoDAO;
+    private ClienteDAO clienteDAO = new ClienteDAO();
+    private FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
+    private ProdutoDAO produtoDAO = new ProdutoDAO();
 
     @FXML
     public void initialize() {
@@ -41,6 +42,37 @@ public class MenuController {
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 1);
 
         spin_Quantidade.setValueFactory(valueFactory);
+    }
+
+    @FXML
+    private void cadastrarTudo() {
+        String nomeFuncionario = txt_NomeFuncionario.getText();
+        String nomeCliente = txt_NomeCliente.getText();
+        String nomeProduto = txt_Produto.getText();
+        String tipoProduto = txt_TipoProduto.getText();
+        Integer quantidadeProduto = spin_Quantidade.getValue();
+
+        Funcionario funcionario1 = new Funcionario();
+        Cliente cliente1 = new Cliente();
+        Produto produto1 = new Produto();
+
+
+        funcionario1.setNome(nomeFuncionario);
+        cliente1.setNome(nomeCliente);
+        produto1.setNome(nomeProduto);
+        produto1.setTipo(tipoProduto);
+        produto1.setQuantidade(quantidadeProduto);
+
+        try {
+            funcionarioDAO.salvar(funcionario1);
+            clienteDAO.salvar(cliente1);
+            produtoDAO.salvar(produto1);
+
+            System.out.println("Tudo salvo com sucesso!");
+            limparCampos();
+        }catch (SQLException e) {
+            System.out.println("Erro ao salvar: " + e.getMessage());
+        }
     }
 
     @FXML
