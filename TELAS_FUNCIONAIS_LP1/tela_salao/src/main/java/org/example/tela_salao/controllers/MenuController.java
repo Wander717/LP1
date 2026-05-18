@@ -37,7 +37,6 @@ public class MenuController {
 
     @FXML
     public void initialize() {
-        limparCampos();
         SpinnerValueFactory<Integer> valueFactory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 1);
 
@@ -46,34 +45,35 @@ public class MenuController {
 
     @FXML
     private void cadastrarTudo() {
+
         String nomeFuncionario = txt_NomeFuncionario.getText();
         String nomeCliente = txt_NomeCliente.getText();
         String nomeProduto = txt_Produto.getText();
         String tipoProduto = txt_TipoProduto.getText();
+
         Integer quantidadeProduto = spin_Quantidade.getValue();
 
         Funcionario funcionario1 = new Funcionario();
         Cliente cliente1 = new Cliente();
         Produto produto1 = new Produto();
 
-
         funcionario1.setNome(nomeFuncionario);
+
         cliente1.setNome(nomeCliente);
+
         produto1.setNome(nomeProduto);
         produto1.setTipo(tipoProduto);
         produto1.setQuantidade(quantidadeProduto);
 
-        try {
-            funcionarioDAO.salvar(funcionario1);
-            clienteDAO.salvar(cliente1);
-            produtoDAO.salvar(produto1);
+        funcionarioDAO.salvar(funcionario1);
+        clienteDAO.salvar(cliente1);
+        produtoDAO.salvar(produto1);
 
-            System.out.println("Tudo salvo com sucesso!");
-            limparCampos();
-        }catch (SQLException e) {
-            System.out.println("Erro ao salvar: " + e.getMessage());
-        }
+        System.out.println("Tudo salvo com sucesso!");
+
+        limparCampos();
     }
+
 
     @FXML
     private void IrparaTabela() {

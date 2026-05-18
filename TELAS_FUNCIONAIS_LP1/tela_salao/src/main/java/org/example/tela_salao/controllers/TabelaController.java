@@ -8,82 +8,125 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.tela_salao.DAOs.ClienteDAO;
 import org.example.tela_salao.DAOs.FuncionarioDAO;
 import org.example.tela_salao.DAOs.ProdutoDAO;
-import org.example.tela_salao.DTO.RegistroTabelaDTO;
+import org.example.tela_salao.entidades.Cliente;
+import org.example.tela_salao.entidades.Funcionario;
+import org.example.tela_salao.entidades.Produto;
 
 public class TabelaController {
 
     @FXML
-    private TableView<RegistroTabelaDTO> tabelaGastos;
+    private TableView<Funcionario> tabelaFuncionario;
 
     @FXML
-    private TableColumn<RegistroTabelaDTO, Integer> colunaId;
+    private TableColumn<Funcionario, Integer> IdFuncionario;
 
     @FXML
-    private TableColumn<RegistroTabelaDTO, String> colunaFuncionario;
+    private TableColumn<Funcionario, String> NomeFuncionario;
+
+
+// CLIENTE
 
     @FXML
-    private TableColumn<RegistroTabelaDTO, String> colunaCliente;
+    private TableView<Cliente> tabelaCliente;
 
     @FXML
-    private TableColumn<RegistroTabelaDTO, String> colunaProduto;
+    private TableColumn<Cliente, Integer> IdCliente;
 
     @FXML
-    private TableColumn<RegistroTabelaDTO, String> colunaTipo;
+    private TableColumn<Cliente, String> NomeCliente;
+
+
+// PRODUTO
 
     @FXML
-    private TableColumn<RegistroTabelaDTO, Integer> colunaQuantidade;
+    private TableView<Produto> tabelaProduto;
 
+    @FXML
+    private TableColumn<Produto, Integer> IdProduto;
+
+    @FXML
+    private TableColumn<Produto, String> NomeProduto;
+
+    @FXML
+    private TableColumn<Produto, String> TipoProduto;
+
+    @FXML
+    private TableColumn<Produto, Integer> QuantProduto;
+
+    //BOTÕES
     @FXML
     private Button btn_Voltar;
 
-    @FXML
-    private Button btn_Excluir;
 
-    @FXML
-    private Button btn_Editar;
+    private ClienteDAO cliente1 = new ClienteDAO();
+    private FuncionarioDAO funcionario1 = new FuncionarioDAO();
+    private ProdutoDAO produto1 = new ProdutoDAO();
 
-    private ClienteDAO cliente = new ClienteDAO();
-    private FuncionarioDAO funcionario = new FuncionarioDAO();
-    private ProdutoDAO produto = new ProdutoDAO();
 
     @FXML
     public void initialize() {
-        @FXML
-        public void initialize() {
 
-            colunaId.setCellValueFactory(
-                    new PropertyValueFactory<>("id")
-            );
+        // FUNCIONÁRIO
+        IdFuncionario.setCellValueFactory(
+                new PropertyValueFactory<>("id")
+        );
 
-            colunaFuncionario.setCellValueFactory(
-                    new PropertyValueFactory<>("funcionario")
-            );
+        NomeFuncionario.setCellValueFactory(
+                new PropertyValueFactory<>("nome")
+        );
 
-            colunaCliente.setCellValueFactory(
-                    new PropertyValueFactory<>("cliente")
-            );
+        // CLIENTE
+        IdCliente.setCellValueFactory(
+                new PropertyValueFactory<>("id")
+        );
 
-            colunaProduto.setCellValueFactory(
-                    new PropertyValueFactory<>("produto")
-            );
+        NomeCliente.setCellValueFactory(
+                new PropertyValueFactory<>("nome")
+        );
 
-            colunaTipo.setCellValueFactory(
-                    new PropertyValueFactory<>("tipo")
-            );
+        // PRODUTO
+        IdProduto.setCellValueFactory(
+                new PropertyValueFactory<>("id")
+        );
 
-            colunaQuantidade.setCellValueFactory(
-                    new PropertyValueFactory<>("quantidade")
-            );
+        NomeProduto.setCellValueFactory(
+                new PropertyValueFactory<>("nome")
+        );
 
-            carregarTabela();
-        }
+        TipoProduto.setCellValueFactory(
+                new PropertyValueFactory<>("tipo")
+        );
 
+        QuantProduto.setCellValueFactory(
+                new PropertyValueFactory<>("quantidade")
+        );
 
+        carregarTabelas();
     }
 
-    private void carregarTabela() {
 
+    private void carregarTabelas() {
+
+        tabelaFuncionario.setItems(
+                FXCollections.observableArrayList(
+                        funcionario1.listarTodos()
+                )
+        );
+
+        tabelaCliente.setItems(
+                FXCollections.observableArrayList(
+                        cliente1.listarTodos()
+                )
+        );
+
+        tabelaProduto.setItems(
+                FXCollections.observableArrayList(
+                        produto1.listarTodos()
+                )
+        );
     }
+
+
 
     @FXML
     private void voltarMenu() {
