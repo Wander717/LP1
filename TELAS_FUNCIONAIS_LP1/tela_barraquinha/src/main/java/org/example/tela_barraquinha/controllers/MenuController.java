@@ -9,7 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.example.tela_barraquinha.FrutaDAO;
+import org.example.tela_barraquinha.DAOS.FrutaDAO;
 import org.example.tela_barraquinha.classes.Cliente;
 import org.example.tela_barraquinha.classes.Fruta;
 
