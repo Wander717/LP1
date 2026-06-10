@@ -1,104 +1,114 @@
 package org.example.tela_barraquinha.controllers;
 
-
-import javafx.event.ActionEvent;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.example.tela_barraquinha.DAOS.FrutaDAO;
-import org.example.tela_barraquinha.classes.Cliente;
-import org.example.tela_barraquinha.classes.Fruta;
+import org.example.tela_barraquinha.classes.Funcionario;
+import org.example.tela_barraquinha.DAOS.FuncionarioDAO;
+import org.example.tela_barraquinha.DAOS.PedidoDAO;
 
-public class MenuController {
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 
-    @FXML
-    private TextField txt_NomeCliente;
+public class MenuController implements Initializable {
 
-    @FXML
-    private TextField txt_NomeFruta;
+    @FXML private TextField             txtNomeCliente;
+    @FXML private TextField             txtNomeFruta;
+    @FXML private Spinner<Integer>      spn_quant_fruta;
+    @FXML private ComboBox<Funcionario> cbFuncionario;
 
-    @FXML
-    private ComboBox<String> combobox_selecionarfruta;
+    private final PedidoDAO      pedidoDAO      = new PedidoDAO();
+    private final FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 
-    @FXML
-    private Spinner<Integer> spn_quant_fruta;
+    // ── Inicialização ─────────────────────────────────────────────────────────
 
-    // Inicializa componentes
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Spinner: mínimo 1, máximo 9999, valor inicial 1
+        spn_quant_fruta.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9999, 1)
+        );
 
-        // Estados da fruta
-        combobox_selecionarfruta.getItems().addAll("Fresco", "Maduro", "Estragado");
-
-        // Spinner (1 a 100)
-        SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
-
-        spn_quant_fruta.setValueFactory(valueFactory);
+        carregarFuncionarios();
     }
 
-    // Botão cadastrar
-    @FXML
-    public void CadastrarTudo() {
+    private void carregarFuncionarios() {
         try {
-            String nome = txt_NomeCliente.getText();
-            String nomeFruta = txt_NomeFruta.getText();
-            String estado = combobox_selecionarfruta.getValue();
-            int quantidade = spn_quant_fruta.getValue();
-
-            // Validação simples
-            if (nome.isEmpty() || nomeFruta.isEmpty() || estado == null) {
-                mostrarAlerta("Erro", "Preencha todos os campos!");
-                return;
-            }
-
-            Cliente cliente = new Cliente(nome);
-            Fruta fruta = new Fruta(cliente, nomeFruta, estado, quantidade);
-
-            FrutaDAO dao = new FrutaDAO();
-            dao.inserir(fruta);
-
-            mostrarAlerta("Sucesso", "Cadastro realizado!");
-
-            limparCampos();
-
+            List<Funcionario> lista = funcionarioDAO.listarTodos();
+            cbFuncionario.setItems(FXCollections.observableArrayList(lista));
         } catch (Exception e) {
-            e.printStackTrace();
-            mostrarAlerta("Erro", "Erro ao salvar no banco!");
+            alerta(Alert.AlertType.ERROR, "Erro ao carregar funcionários", e.getMessage());
         }
     }
 
-    // Ir para tela de lista
-    @FXML
-    public void irParaLista(ActionEvent event) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/tela_listafrutas.fxml"));
-        Parent root = loader.load();
+    // ── Ações dos botões ──────────────────────────────────────────────────────
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
+    @FXML
+    private void CadastrarTudo() {
+        String nomeCliente      = txtNomeCliente.getText().trim();
+        String nomeFruta        = txtNomeFruta.getText().trim();
+        int    quantidade       = spn_quant_fruta.getValue();
+        Funcionario funcionario = cbFuncionario.getValue();
+
+        // Validações
+        if (nomeCliente.isEmpty()) {
+            alerta(Alert.AlertType.WARNING, "Campo obrigatório", "Informe o nome do cliente.");
+            txtNomeCliente.requestFocus();
+            return;
+        }
+        if (nomeFruta.isEmpty()) {
+            alerta(Alert.AlertType.WARNING, "Campo obrigatório", "Informe o nome da fruta.");
+            txtNomeFruta.requestFocus();
+            return;
+        }
+        if (funcionario == null) {
+            alerta(Alert.AlertType.WARNING, "Campo obrigatório", "Selecione o funcionário que fez o atendimento.");
+            cbFuncionario.requestFocus();
+            return;
+        }
+
+        // Persistência
+        try {
+            pedidoDAO.inserirPedido(nomeCliente, nomeFruta,
+                    funcionario.getId_funcionario(), quantidade);
+            alerta(Alert.AlertType.INFORMATION, "Sucesso", "Pedido cadastrado com sucesso!");
+            limparCampos();
+        } catch (Exception e) {
+            alerta(Alert.AlertType.ERROR, "Erro ao cadastrar pedido", e.getMessage());
+        }
     }
 
-    // Botão sair
     @FXML
-    public void sair() {
-        System.exit(0);
+    private void irParaLista() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/tela_listafrutas.fxml"));
+            Stage stage = (Stage) txtNomeCliente.getScene().getWindow();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Barraquinha do Seu Zé — Pedidos");
+        } catch (IOException e) {
+            alerta(Alert.AlertType.ERROR, "Erro de navegação",
+                    "Não foi possível abrir a lista: " + e.getMessage());
+        }
     }
 
-    // Limpar campos
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
     private void limparCampos() {
-        txt_NomeCliente.clear();
-        txt_NomeFruta.clear();
-        combobox_selecionarfruta.setValue(null);
+        txtNomeCliente.clear();
+        txtNomeFruta.clear();
         spn_quant_fruta.getValueFactory().setValue(1);
+        cbFuncionario.setValue(null);
     }
 
-    // Alertas
-    private void mostrarAlerta(String titulo, String mensagem) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void alerta(Alert.AlertType tipo, String titulo, String mensagem) {
+        Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensagem);

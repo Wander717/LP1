@@ -20,7 +20,7 @@
          </image>
       </ImageView>
 
-      <Label layoutX="255.0" layoutY="26.0" text="Menu" underline="true">
+      <Label layoutX="133.0" layoutY="28.0" text="Barraquinha do seu Zé" underline="true">
          <font>
             <Font size="35.0" />
          </font>
@@ -28,10 +28,10 @@
 
       <TextField fx:id="txtNomeCliente" layoutX="175.0" layoutY="322.0" prefHeight="25.0" prefWidth="251.0" promptText="Digite o nome do cliente aqui..." />
 
-      <Button fx:id="btn_cadastrar" layoutX="225.0" layoutY="614.0" onAction="#CadastrarTudo" prefHeight="59.0" prefWidth="124.0" text="Cadastrar tudo" />
+      <Button fx:id="btn_cadastrar" layoutX="225.0" layoutY="636.0" onAction="#CadastrarTudo" prefHeight="59.0" prefWidth="124.0" text="Cadastrar tudo" />
 
-      <Button fx:id="btn_tabela" layoutX="194.0" layoutY="704.0" onAction="#irParaLista" prefHeight="35.0" prefWidth="186.0" text="Consultar tabela" />
-      <ComboBox fx:id="cbFuncionario" layoutX="156.0" layoutY="521.0" prefHeight="26.0" prefWidth="262.0" promptText="Selecione o Funcionário que atendeu" />
+      <Button fx:id="btn_tabela" layoutX="189.0" layoutY="725.0" onAction="#irParaLista" prefHeight="35.0" prefWidth="186.0" text="Consultar tabela" />
+      <ComboBox fx:id="cbFuncionario" layoutX="134.0" layoutY="511.0" prefHeight="26.0" prefWidth="296.0" promptText="Selecione o Funcionário que fez o atendimento" />
       <Spinner fx:id="spn_quant_fruta" layoutX="249.0" layoutY="456.0" prefHeight="26.0" prefWidth="75.0" />
       <Label layoutX="254.0" layoutY="431.0" text="Quantidade">
          <font>

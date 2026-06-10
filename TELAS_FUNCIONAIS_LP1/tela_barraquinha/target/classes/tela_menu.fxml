@@ -20,28 +20,25 @@
          </image>
       </ImageView>
 
-      <Label layoutX="255.0" layoutY="26.0" text="Menu" underline="true">
+      <Label layoutX="133.0" layoutY="28.0" text="Barraquinha do seu Zé" underline="true">
          <font>
             <Font size="35.0" />
          </font>
       </Label>
 
-      <TextField fx:id="txt_NomeCliente" layoutX="175.0" layoutY="322.0" prefHeight="25.0" prefWidth="251.0" promptText="Digite o nome do cliente aqui..."  />
+      <TextField fx:id="txtNomeCliente" layoutX="175.0" layoutY="322.0" prefHeight="25.0" prefWidth="251.0" promptText="Digite o nome do cliente aqui..." />
 
-      <Button fx:id="btn_cadastrar" layoutX="234.0" layoutY="616.0" onAction="#CadastrarTudo" text="Cadastrar tudo" />
+      <Button fx:id="btn_cadastrar" layoutX="225.0" layoutY="636.0" onAction="#CadastrarTudo" prefHeight="59.0" prefWidth="124.0" text="Cadastrar tudo" />
 
-      <Button fx:id="btn_tabela" layoutX="189.0" layoutY="665.0" onAction="#irParaLista" prefHeight="35.0" prefWidth="186.0" text="Consultar tabela" />
-
-      <Button fx:id="btn_sair" layoutX="264.0" layoutY="729.0" onAction="#sair" text="Sair" textFill="RED" />
-      <ComboBox fx:id="combobox_selecionarfruta" layoutX="199.0" layoutY="439.0" prefHeight="25.0" prefWidth="199.0" promptText="Selecione o estado da fruta" />
-      <Spinner fx:id="spn_quant_fruta" layoutX="244.0" layoutY="548.0" prefHeight="26.0" prefWidth="75.0" />
-      <Label layoutX="249.0" layoutY="521.0" text="Quantidade">
+      <Button fx:id="btn_tabela" layoutX="189.0" layoutY="725.0" onAction="#irParaLista" prefHeight="35.0" prefWidth="186.0" text="Consultar tabela" />
+      <ComboBox fx:id="cbFuncionario" layoutX="134.0" layoutY="511.0" prefHeight="26.0" prefWidth="296.0" promptText="Selecione o Funcionário que fez o atendimento" />
+      <Spinner fx:id="spn_quant_fruta" layoutX="249.0" layoutY="456.0" prefHeight="26.0" prefWidth="75.0" />
+      <Label layoutX="254.0" layoutY="431.0" text="Quantidade">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <TextField fx:id="txt_NomeFruta" layoutX="175.0" layoutY="388.0" prefHeight="25.0" prefWidth="251.0" promptText="Digite o nome da fruta aqui..." />
-      <Label text="Label" />
+      <TextField fx:id="txtNomeFruta" layoutX="175.0" layoutY="388.0" prefHeight="25.0" prefWidth="251.0" promptText="Digite o nome da fruta aqui..." />
       <Label layoutX="268.0" layoutY="361.0" text="Fruta">
          <font>
             <Font name="System Bold" size="12.0" />

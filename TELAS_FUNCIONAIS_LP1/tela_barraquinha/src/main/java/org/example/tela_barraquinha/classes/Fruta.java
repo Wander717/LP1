@@ -2,54 +2,28 @@ package org.example.tela_barraquinha.classes;
 
 public class Fruta {
 
-    private Cliente cliente;
-    private String nomeFruta;
-    private String estado;
-    private int quantidade;
+    private int id_fruta;
+    private String nome_fruta;
 
-    // Construtor completo
-    public Fruta(Cliente cliente, String nomeFruta, String estado, int quantidade) {
-        this.cliente = cliente;
-        this.nomeFruta = nomeFruta;
-        this.estado = estado;
-        this.quantidade = quantidade;
+    public Fruta() {}
+
+    public Fruta(int id_fruta, String nome_fruta) {
+        this.id_fruta = id_fruta;
+        this.nome_fruta = nome_fruta;
     }
 
-    // Construtor vazio
-    public Fruta() {
+    public Fruta(String nome_fruta) {
+        this.nome_fruta = nome_fruta;
     }
 
-    // GETTERS
-    public Cliente getCliente() {
-        return cliente;
-    }
+    public int getId_fruta()             { return id_fruta; }
+    public void setId_fruta(int id)       { this.id_fruta = id; }
 
-    public String getNomeFruta() {
-        return nomeFruta;
-    }
+    public String getNome_fruta()           { return nome_fruta; }
+    public void setNome_fruta(String s)   { this.nome_fruta = s; }
 
-    public String getEstado() {
-        return estado;
-    }
-
-    public int getQuantidade() {
-        return quantidade;
-    }
-
-    // SETTERS
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public void setNomeFruta(String nomeFruta) {
-        this.nomeFruta = nomeFruta;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
+    @Override
+    public String toString() {
+        return "Fruta{id=" + id_fruta + ", nome='" + nome_fruta + "'}";
     }
 }

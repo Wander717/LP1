@@ -20,17 +20,23 @@
         <TableView fx:id="tabela_frutas" layoutY="128.0" prefHeight="583.0" prefWidth="802.0">
 
             <columns>
-                <TableColumn fx:id="col_NomeCliente" prefWidth="348.0" text="Cliente" />
-                <TableColumn fx:id="col_NomeFruta" prefWidth="229.0" text="Fruta" />
-                <TableColumn fx:id="col_Estado" prefWidth="122.0" text="Estado" />
-            <TableColumn fx:id="col_Quant" prefWidth="102.0" text="Quantidade" />
+                <TableColumn fx:id="colIdPedido" prefWidth="80.79998624324799" text="Id_Pedido" />
+            <TableColumn fx:id="colNomeCliente" prefWidth="186.40003204345703" text="Cliente" />
+                <TableColumn fx:id="colNomeFruta" prefWidth="229.5999755859375" text="Fruta" />
+                <TableColumn fx:id="colFuncionario" prefWidth="219.99990844726562" text="Funcionário" />
+            <TableColumn fx:id="colQuant" prefWidth="86.4000244140625" text="Quantidade" />
             </columns>
 
         </TableView>
 
-        <Button fx:id="btn_sair" layoutX="61.0" layoutY="736.0" onAction="#sair" text="Sair" textFill="RED" />
-
-        <Button fx:id="btn_voltar" layoutX="642.0" layoutY="736.0" onAction="#voltarMenu" text="Voltar ao menu" />
+        <Button fx:id="btnVoltarMenu" layoutX="21.0" layoutY="749.0" onAction="#voltarMenu" text="Voltar ao menu" />
+      <Button fx:id="btnSalvar" layoutX="708.0" layoutY="736.0" mnemonicParsing="false" onAction="#salvarTudo" prefHeight="26.0" prefWidth="61.0" text="Salvar" />
+      <Button fx:id="btnEditarSelec" layoutX="457.0" layoutY="736.0" mnemonicParsing="false" onAction="#editarSelecionado" prefHeight="26.0" prefWidth="120.0" text="Editar Selecionado" />
+      <Button fx:id="btnExcluirSelec" layoutX="208.0" layoutY="736.0" mnemonicParsing="false" onAction="#excluirSelecionado" prefHeight="26.0" prefWidth="142.0" style="-fx-background-color: red;" text="Excluir selecionado">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
 
     </children>
 </AnchorPane>
