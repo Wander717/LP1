@@ -1,29 +1,24 @@
 package org.example.tela_farmacia.classes;
 
 public class Remedio {
-    private String nome;
-    private String tipo;
-    private int quantidade;
-    private int id;
+    private String nome_remedio;
+    private String tipo_remedio;
+    private int id_remedio  ;
 
 
     //CONSTRUTOR
-    public Remedio (String nome, String tipo, int quantidade, int id) {
-        this.nome = nome;
-        this.tipo = tipo;
-        this.quantidade = quantidade;
-        this.id = id;
+    public Remedio (String nome_remedio, String tipo_remedio, int id_remedio) {
+        this.nome_remedio = nome_remedio;
+        this.tipo_remedio = tipo_remedio;
+        this.id_remedio = id_remedio;
     }
 
     //GETTERS
-    public String getNome() {
-        return nome;
+    public String getNome_remedio() {
+        return nome_remedio;
     }
-    public String getTipo() {
-        return tipo;
+    public String getTipo_remedio() {
+        return tipo_remedio;
     }
-    public int getQuantidade() {
-        return quantidade;
-    }
-    public int getId() {return id;}
+    public int getId_remedio() {return id_remedio;}
 }

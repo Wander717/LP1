@@ -21,15 +21,15 @@ public class RegistroDAO {
         try {
             this.conexao.setAutoCommit(false);
 
-            int idCliente = executarEObterId(sqlCli, registro.getCliente().getNome(), registro.getCliente().getIdade());
-            int idFuncionario = executarEObterId(sqlFun, registro.getFuncionario().getNome(), registro.getFuncionario().getCargo());
-            int idRemedio = executarEObterId(sqlRem, registro.getRemedio().getNome(), registro.getRemedio().getTipo(), registro.getRemedio().getQuantidade());
+            int idCliente = executarEObterId(sqlCli, registro.getCliente().getNome_cliente(), registro.getCliente().getIdade_cliente());
+            int idFuncionario = executarEObterId(sqlFun, registro.getFuncionario().getNome_funcionario(), registro.getFuncionario().getCargo_funcionario());
+            int idRemedio = executarEObterId(sqlRem, registro.getRemedio().getNome_remedio(), registro.getRemedio().getTipo_remedio(), registro.getRemedio().getQuantidade_remedio());
 
             try (PreparedStatement stmt = this.conexao.prepareStatement(sqlReg)) {
                 stmt.setInt(1, idCliente);
                 stmt.setInt(2, idFuncionario);
                 stmt.setInt(3, idRemedio);
-                stmt.setInt(4, registro.getRemedio().getQuantidade());
+                stmt.setInt(4, registro.getRemedio().getQuantidade_remedio());
                 stmt.executeUpdate();
             }
 
@@ -88,7 +88,7 @@ public class RegistroDAO {
                 );
 
                 Registro reg = new Registro(c, f, r);
-                reg.setId(idRegistro);
+                reg.setId_registro(idRegistro);
 
                 lista.add(reg);
             }

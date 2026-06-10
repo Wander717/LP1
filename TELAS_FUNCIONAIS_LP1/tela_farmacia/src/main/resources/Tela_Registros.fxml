@@ -25,8 +25,9 @@
             <TableColumn fx:id="col_NomeFuncionario" prefWidth="276.0" text="Funcionário responsável" />
         </columns>
       </TableView>
-      <Button fx:id="btn_VoltarMenu" layoutX="29.0" layoutY="737.0" mnemonicParsing="false" onAction="#voltarMenu" prefHeight="49.0" prefWidth="145.0" text="Voltar ao Menu" />
-      <Button fx:id="btn_EditarSelecionado" layoutX="710.0" layoutY="736.0" mnemonicParsing="false" onAction="#editarLinhaSelecionada" text="Editar Selecionado" />
-      <Button fx:id="btn_ExcluirSelecionado" layoutX="1073.0" layoutY="736.0" mnemonicParsing="false" onAction="#excluirLinhaSelecionada" text="Excluir selecionado" />
+      <Button fx:id="btnVoltarMenu" layoutX="29.0" layoutY="737.0" mnemonicParsing="false" onAction="#voltarMenu" prefHeight="49.0" prefWidth="145.0" text="Voltar ao Menu" />
+      <Button fx:id="btnEditar" layoutX="710.0" layoutY="736.0" mnemonicParsing="false" onAction="#editarLinhaSelecionada" text="Editar Selecionado" />
+      <Button fx:id="btnExcluir" layoutX="326.0" layoutY="736.0" mnemonicParsing="false" onAction="#excluirLinhaSelecionada" text="Excluir selecionado" />
+      <Button fx:id="btnSalvar" layoutX="1124.0" layoutY="736.0" mnemonicParsing="false" onAction="#salvarAlteracoes" text="Salvar " />
    </children>
 </AnchorPane>

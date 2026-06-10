@@ -58,25 +58,25 @@ public class RegistrosController {
 
     private void configurarColunas() {
         // Mapeamento das colunas
-        col_IdRegistro.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
+        col_IdRegistro.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId_registro()).asObject());
 
         col_NomeCliente.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getCliente().getNome()));
+                new SimpleStringProperty(data.getValue().getCliente().getNome_cliente()));
 
         col_IdadeCliente.setCellValueFactory(data ->
-                new SimpleIntegerProperty(data.getValue().getCliente().getIdade()).asObject());
+                new SimpleIntegerProperty(data.getValue().getCliente().getIdade_cliente()).asObject());
 
         col_NomeRemedio.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getRemedio().getNome()));
+                new SimpleStringProperty(data.getValue().getRemedio().getNome_remedio()));
 
         col_TipoRemedio.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getRemedio().getTipo()));
+                new SimpleStringProperty(data.getValue().getRemedio().getTipo_remedio()));
 
         col_QuantRemedio.setCellValueFactory(data ->
-                new SimpleIntegerProperty(data.getValue().getRemedio().getQuantidade()).asObject());
+                new SimpleIntegerProperty(data.getValue().getRemedio().getQuantidade_remedio()).asObject());
 
         col_NomeFuncionario.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getFuncionario().getNome()));
+                new SimpleStringProperty(data.getValue().getFuncionario().getNome_funcionario()));
     }
 
     private void carregarDados() {
@@ -98,12 +98,12 @@ public class RegistrosController {
         if (selecionado != null) {
             Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
             alerta.setTitle("Confirmar Exclusão");
-            alerta.setContentText("Deseja realmente excluir o registro do cliente " + selecionado.getCliente().getNome() + "?");
+            alerta.setContentText("Deseja realmente excluir o registro do cliente " + selecionado.getCliente().getNome_cliente() + "?");
 
             if (alerta.showAndWait().get() == ButtonType.OK) {
                 try (Connection conexao = DatabaseConnection.getConnection()) {
                     RegistroDAO dao = new RegistroDAO(conexao);
-                    dao.deletar(selecionado.getId());
+                    dao.deletar(selecionado.getId_registro());
 
                     carregarDados(); // Atualiza a tabela
                     mostrarAlerta("Sucesso", "Registro excluído com sucesso!", Alert.AlertType.INFORMATION);
@@ -121,7 +121,7 @@ public class RegistrosController {
         Registro selecionado = tabela_Registros.getSelectionModel().getSelectedItem();
         if (selecionado != null) {
             // Lógica para abrir tela de edição ou preencher campos
-            System.out.println("Editando registro ID: " + selecionado.getId());
+            System.out.println("Editando registro ID: " + selecionado.getId_registro());
         } else {
             mostrarAlerta("Aviso", "Selecione um registro para editar!", Alert.AlertType.WARNING);
         }
