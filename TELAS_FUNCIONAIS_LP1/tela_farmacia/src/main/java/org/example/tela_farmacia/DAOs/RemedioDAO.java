@@ -1,94 +1,113 @@
 package org.example.tela_farmacia.dao;
 
-import org.example.tela_farmacia.classes.Remedio;
+import org.example.tela_farmacia.DatabaseConnection;
+import org.example.tela_farmacia.entities.Remedio;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RemedioDAO {
 
-    private Connection connection;
-
-    public RemedioDAO(Connection connection) {
-        this.connection = connection;
-    }
-
-    // CREATE
-    public void inserir(Remedio remedio) throws SQLException {
+    // -------------------------------------------------------------------------
+    // INSERT
+    // -------------------------------------------------------------------------
+    public int inserir(Remedio remedio) throws SQLException {
         String sql = "INSERT INTO remedio (nome_remedio, tipo_remedio) VALUES (?, ?)";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, remedio.getNome_remedio());
-            stmt.setString(2, remedio.getTipo_remedio());
-            stmt.executeUpdate();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            try (ResultSet keys = stmt.getGeneratedKeys()) {
-                if (keys.next()) {
-                    remedio.setId_remedio(keys.getInt(1));
+            ps.setString(1, remedio.getNome_remedio());
+            ps.setString(2, remedio.getTipo_remedio());
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int idGerado = rs.getInt(1);
+                    remedio.setId_remedio(idGerado);
+                    return idGerado;
                 }
             }
         }
+        return -1;
     }
 
-    // READ — por ID
-    public Remedio buscarPorId(int id) throws SQLException {
+    // -------------------------------------------------------------------------
+    // SELECT ALL
+    // -------------------------------------------------------------------------
+    public List<Remedio> listarTodos() throws SQLException {
+        String sql = "SELECT id_remedio, nome_remedio, tipo_remedio FROM remedio";
+        List<Remedio> lista = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Remedio r = new Remedio(
+                        rs.getInt("id_remedio"),
+                        rs.getString("nome_remedio"),
+                        rs.getString("tipo_remedio")
+                );
+                lista.add(r);
+            }
+        }
+        return lista;
+    }
+
+    // -------------------------------------------------------------------------
+    // SELECT BY ID
+    // -------------------------------------------------------------------------
+    public Remedio buscarPorId(int id_remedio) throws SQLException {
         String sql = "SELECT id_remedio, nome_remedio, tipo_remedio FROM remedio WHERE id_remedio = ?";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            try (ResultSet rs = stmt.executeQuery()) {
+            ps.setInt(1, id_remedio);
+
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapear(rs);
+                    return new Remedio(
+                            rs.getInt("id_remedio"),
+                            rs.getString("nome_remedio"),
+                            rs.getString("tipo_remedio")
+                    );
                 }
             }
         }
         return null;
     }
 
-    // READ — todos
-    public List<Remedio> listarTodos() throws SQLException {
-        String sql = "SELECT id_remedio, nome_remedio, tipo_remedio FROM remedio ORDER BY nome_remedio";
-        List<Remedio> lista = new ArrayList<>();
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                lista.add(mapear(rs));
-            }
-        }
-        return lista;
-    }
-
+    // -------------------------------------------------------------------------
     // UPDATE
-    public void atualizar(Remedio remedio) throws SQLException {
+    // -------------------------------------------------------------------------
+    public boolean atualizar(Remedio remedio) throws SQLException {
         String sql = "UPDATE remedio SET nome_remedio = ?, tipo_remedio = ? WHERE id_remedio = ?";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, remedio.getNome_remedio());
-            stmt.setString(2, remedio.getTipo_remedio());
-            stmt.setInt(3, remedio.getId_remedio());
-            stmt.executeUpdate();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, remedio.getNome_remedio());
+            ps.setString(2, remedio.getTipo_remedio());
+            ps.setInt(3, remedio.getId_remedio());
+
+            return ps.executeUpdate() > 0;
         }
     }
 
+    // -------------------------------------------------------------------------
     // DELETE
-    public void deletar(int id) throws SQLException {
+    // -------------------------------------------------------------------------
+    public boolean deletar(int id_remedio) throws SQLException {
         String sql = "DELETE FROM remedio WHERE id_remedio = ?";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-        }
-    }
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-    // MAPPER
-    private Remedio mapear(ResultSet rs) throws SQLException {
-        return new Remedio(
-                rs.getString("nome_remedio"),
-                rs.getString("tipo_remedio"),
-                rs.getInt("id_remedio")
-        );
+            ps.setInt(1, id_remedio);
+            return ps.executeUpdate() > 0;
+        }
     }
 }

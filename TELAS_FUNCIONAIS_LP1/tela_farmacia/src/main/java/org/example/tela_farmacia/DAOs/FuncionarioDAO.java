@@ -1,94 +1,137 @@
 package org.example.tela_farmacia.dao;
 
-import org.example.tela_farmacia.classes.Funcionario;
+import org.example.tela_farmacia.DatabaseConnection;
+import org.example.tela_farmacia.entities.Funcionario;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FuncionarioDAO {
 
-    private Connection connection;
-
-    public FuncionarioDAO(Connection connection) {
-        this.connection = connection;
-    }
-
-    // CREATE
-    public void inserir(Funcionario funcionario) throws SQLException {
+    // -------------------------------------------------------------------------
+    // INSERT
+    // -------------------------------------------------------------------------
+    public int inserir(Funcionario funcionario) throws SQLException {
         String sql = "INSERT INTO funcionario (nome_funcionario, cargo_funcionario) VALUES (?, ?)";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, funcionario.getNome_funcionario());
-            stmt.setString(2, funcionario.getCargo_funcionario());
-            stmt.executeUpdate();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            try (ResultSet keys = stmt.getGeneratedKeys()) {
-                if (keys.next()) {
-                    funcionario.setId_funcionario(keys.getInt(1));
+            ps.setString(1, funcionario.getNome_funcionario());
+            ps.setString(2, funcionario.getCargo_funcionario());
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int idGerado = rs.getInt(1);
+                    funcionario.setId_funcionario(idGerado);
+                    return idGerado;
                 }
             }
         }
+        return -1;
     }
 
-    // READ — por ID
-    public Funcionario buscarPorId(int id) throws SQLException {
+    // -------------------------------------------------------------------------
+    // SELECT ALL
+    // -------------------------------------------------------------------------
+    public List<Funcionario> listarTodos() throws SQLException {
+        String sql = "SELECT id_funcionario, nome_funcionario, cargo_funcionario FROM funcionario";
+        List<Funcionario> lista = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Funcionario f = new Funcionario(
+                        rs.getInt("id_funcionario"),
+                        rs.getString("nome_funcionario"),
+                        rs.getString("cargo_funcionario")
+                );
+                lista.add(f);
+            }
+        }
+        return lista;
+    }
+
+    // -------------------------------------------------------------------------
+    // SELECT BY ID
+    // -------------------------------------------------------------------------
+    public Funcionario buscarPorId(int id_funcionario) throws SQLException {
         String sql = "SELECT id_funcionario, nome_funcionario, cargo_funcionario FROM funcionario WHERE id_funcionario = ?";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            try (ResultSet rs = stmt.executeQuery()) {
+            ps.setInt(1, id_funcionario);
+
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapear(rs);
+                    return new Funcionario(
+                            rs.getInt("id_funcionario"),
+                            rs.getString("nome_funcionario"),
+                            rs.getString("cargo_funcionario")
+                    );
                 }
             }
         }
         return null;
     }
 
-    // READ — todos
-    public List<Funcionario> listarTodos() throws SQLException {
-        String sql = "SELECT id_funcionario, nome_funcionario, cargo_funcionario FROM funcionario ORDER BY nome_funcionario";
-        List<Funcionario> lista = new ArrayList<>();
+    // -------------------------------------------------------------------------
+    // SELECT BY NOME (útil para buscar pelo nome digitado no campo do FXML)
+    // -------------------------------------------------------------------------
+    public Funcionario buscarPorNome(String nome_funcionario) throws SQLException {
+        String sql = "SELECT id_funcionario, nome_funcionario, cargo_funcionario FROM funcionario WHERE nome_funcionario = ?";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            while (rs.next()) {
-                lista.add(mapear(rs));
+            ps.setString(1, nome_funcionario);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Funcionario(
+                            rs.getInt("id_funcionario"),
+                            rs.getString("nome_funcionario"),
+                            rs.getString("cargo_funcionario")
+                    );
+                }
             }
         }
-        return lista;
+        return null;
     }
 
+    // -------------------------------------------------------------------------
     // UPDATE
-    public void atualizar(Funcionario funcionario) throws SQLException {
+    // -------------------------------------------------------------------------
+    public boolean atualizar(Funcionario funcionario) throws SQLException {
         String sql = "UPDATE funcionario SET nome_funcionario = ?, cargo_funcionario = ? WHERE id_funcionario = ?";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, funcionario.getNome_funcionario());
-            stmt.setString(2, funcionario.getCargo_funcionario());
-            stmt.setInt(3, funcionario.getId_funcionario());
-            stmt.executeUpdate();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, funcionario.getNome_funcionario());
+            ps.setString(2, funcionario.getCargo_funcionario());
+            ps.setInt(3, funcionario.getId_funcionario());
+
+            return ps.executeUpdate() > 0;
         }
     }
 
+    // -------------------------------------------------------------------------
     // DELETE
-    public void deletar(int id) throws SQLException {
+    // -------------------------------------------------------------------------
+    public boolean deletar(int id_funcionario) throws SQLException {
         String sql = "DELETE FROM funcionario WHERE id_funcionario = ?";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-        }
-    }
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-    // MAPPER
-    private Funcionario mapear(ResultSet rs) throws SQLException {
-        return new Funcionario(
-                rs.getString("nome_funcionario"),
-                rs.getString("cargo_funcionario"),
-                rs.getInt("id_funcionario")
-        );
+            ps.setInt(1, id_funcionario);
+            return ps.executeUpdate() > 0;
+        }
     }
 }
