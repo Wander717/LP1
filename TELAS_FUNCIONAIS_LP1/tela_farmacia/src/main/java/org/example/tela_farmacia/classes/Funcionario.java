@@ -23,4 +23,10 @@ public class Funcionario {
         return cargo_funcionario;
     }
     public int getId_funcionario() {return id_funcionario;}
+
+    // SETTERS
+    public void setNome_funcionario(String nome_funcionario) {this.nome_funcionario = nome_funcionario;}
+    public void setCargo_funcionario(String cargo_funcionario) {this.cargo_funcionario = cargo_funcionario;}
+    public void setId_funcionario(int id_funcionario) {this.id_funcionario = id_funcionario;}
+
 }

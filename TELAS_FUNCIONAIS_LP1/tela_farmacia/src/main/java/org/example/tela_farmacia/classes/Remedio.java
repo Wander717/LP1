@@ -13,6 +13,9 @@ public class Remedio {
         this.id_remedio = id_remedio;
     }
 
+    //CONSTRUTOR VAZIO
+    public Remedio () {}
+
     //GETTERS
     public String getNome_remedio() {
         return nome_remedio;
@@ -21,4 +24,9 @@ public class Remedio {
         return tipo_remedio;
     }
     public int getId_remedio() {return id_remedio;}
+
+    // SETTERS
+    public void setNome_remedio(String nome_remedio) {this.nome_remedio = nome_remedio;}
+    public void setTipo_remedio(String tipo_remedio) {this.tipo_remedio = tipo_remedio;}
+    public void setId_remedio(int id_remedio) {this.id_remedio = id_remedio;}
 }

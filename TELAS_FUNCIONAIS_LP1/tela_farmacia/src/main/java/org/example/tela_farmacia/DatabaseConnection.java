@@ -6,11 +6,19 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/farmacia";
+    private static final String URL  = "jdbc:mysql://localhost:3306/farmacia";
     private static final String USER = "root";
     private static final String PASS = "root";
 
+    private static Connection connection;
+
+    // Construtor privado — impede new DatabaseConnection()
+    private DatabaseConnection() {}
+
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASS);
+        if (connection == null || connection.isClosed()) {
+            connection = DriverManager.getConnection(URL, USER, PASS);
+        }
+        return connection;
     }
 }
