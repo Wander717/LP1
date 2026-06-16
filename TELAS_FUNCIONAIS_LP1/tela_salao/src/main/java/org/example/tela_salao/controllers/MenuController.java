@@ -113,7 +113,7 @@ public class MenuController implements Initializable {
     }
 
     @FXML
-    private void IrparaTabela() {
+    private void irparaTabela() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Tela_Tabela.fxml"));
             Parent root = loader.load();

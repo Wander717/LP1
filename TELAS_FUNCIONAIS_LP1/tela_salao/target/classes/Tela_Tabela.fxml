@@ -15,9 +15,9 @@
          </font>
       </Label>
       <Button fx:id="btnVoltar" layoutX="648.0" layoutY="786.0" mnemonicParsing="false" onAction="#voltarMenu" prefHeight="50.0" prefWidth="127.0" text="Voltar" />
-      <Button fx:id="btnEditar" layoutX="1113.0" layoutY="786.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="163.0" text="Editar Item selecionado" />
-      <Button fx:id="btnExcluir" layoutX="155.0" layoutY="786.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="176.0" text="Excluir Registro selecionado" />
-      <TableView layoutX="2.0" layoutY="228.0" prefHeight="451.0" prefWidth="1445.0">
+      <Button fx:id="btnEditar" layoutX="1113.0" layoutY="786.0" mnemonicParsing="false" onAction="#editarItemSelecionado" prefHeight="50.0" prefWidth="163.0" text="Editar Item selecionado" />
+      <Button fx:id="btnExcluir" layoutX="155.0" layoutY="786.0" mnemonicParsing="false" onAction="#excluirRegistroSelecionado" prefHeight="50.0" prefWidth="176.0" text="Excluir Registro selecionado" />
+       <TableView fx:id="tableView" layoutX="2.0" layoutY="228.0" prefHeight="451.0" prefWidth="1445.0">
         <columns>
           <TableColumn fx:id="colIdRegistro" prefWidth="75.0" text="ID Registro" />
           <TableColumn fx:id="colFuncionario" prefWidth="323.0" text="Funcionário" />
