@@ -22,3 +22,8 @@ id_funcionario INT NOT NULL,
 CONSTRAINT fk_registro_produto FOREIGN KEY (id_produto) REFERENCES produto(id_produto),
 CONSTRAINT fk_registro_funcionario FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_funcionario)
 );
+
+INSERT INTO funcionario (nome_funcionario) VALUES ('Francisco');
+INSERT INTO funcionario (nome_funcionario) VALUES ('Juliana');
+INSERT INTO funcionario (nome_funcionario) VALUES ('Roberto');
+

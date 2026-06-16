@@ -1,148 +1,179 @@
 package org.example.tela_salao.controllers;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import org.example.tela_salao.DAOs.RegistroDAO;
+import javafx.stage.Stage;
 import org.example.tela_salao.DAOs.FuncionarioDAO;
 import org.example.tela_salao.DAOs.ProdutoDAO;
-import org.example.tela_salao.entidades.Registro;
+import org.example.tela_salao.DAOs.RegistroDAO;
 import org.example.tela_salao.entidades.Funcionario;
 import org.example.tela_salao.entidades.Produto;
+import org.example.tela_salao.entidades.Registro;
 
-public class TabelaController {
+import java.io.IOException;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
-    @FXML
-    private TableView<Funcionario> tabelaFuncionario;
+public class TabelaController implements Initializable {
 
-    @FXML
-    private TableColumn<Funcionario, Integer> IdFuncionario;
+    @FXML private TableView<RegistroView> tableView;
+    @FXML private TableColumn<RegistroView, Integer> colIdRegistro;
+    @FXML private TableColumn<RegistroView, String> colFuncionario;
+    @FXML private TableColumn<RegistroView, String> colProduto;
+    @FXML private TableColumn<RegistroView, String> colTipoProduto;
+    @FXML private TableColumn<RegistroView, Integer> colQuantidade;
+    @FXML private TableColumn<RegistroView, LocalDate> colDataRegistro;
+    @FXML private Button btnEditar;
+    @FXML private Button btnExcluir;
 
-    @FXML
-    private TableColumn<Funcionario, String> NomeFuncionario;
+    private final RegistroDAO registroDAO = new RegistroDAO();
+    private final ProdutoDAO produtoDAO = new ProdutoDAO();
+    private final FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 
+    private final ObservableList<RegistroView> dados = FXCollections.observableArrayList();
 
-// CLIENTE
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        configurarColunas();
+        carregarDados();
 
-    @FXML
-    private TableView<Registro> tabelaCliente;
+        // Habilita os botões apenas quando há item selecionado
+        btnEditar.setDisable(true);
+        btnExcluir.setDisable(true);
 
-    @FXML
-    private TableColumn<Registro, Integer> IdCliente;
-
-    @FXML
-    private TableColumn<Registro, String> NomeCliente;
-
-
-// PRODUTO
-
-    @FXML
-    private TableView<Produto> tabelaProduto;
-
-    @FXML
-    private TableColumn<Produto, Integer> IdProduto;
-
-    @FXML
-    private TableColumn<Produto, String> NomeProduto;
-
-    @FXML
-    private TableColumn<Produto, String> TipoProduto;
-
-    @FXML
-    private TableColumn<Produto, Integer> QuantProduto;
-
-    //BOTÕES
-    @FXML
-    private Button btn_Voltar;
-
-
-    private RegistroDAO cliente1 = new RegistroDAO();
-    private FuncionarioDAO funcionario1 = new FuncionarioDAO();
-    private ProdutoDAO produto1 = new ProdutoDAO();
-
-
-    @FXML
-    public void initialize() {
-
-        // FUNCIONÁRIO
-        IdFuncionario.setCellValueFactory(
-                new PropertyValueFactory<>("id")
+        tableView.getSelectionModel().selectedItemProperty().addListener(
+                (obs, antigo, novo) -> {
+                    boolean semSelecao = (novo == null);
+                    btnEditar.setDisable(semSelecao);
+                    btnExcluir.setDisable(semSelecao);
+                }
         );
 
-        NomeFuncionario.setCellValueFactory(
-                new PropertyValueFactory<>("nome")
-        );
-
-        // CLIENTE
-        IdCliente.setCellValueFactory(
-                new PropertyValueFactory<>("id")
-        );
-
-        NomeCliente.setCellValueFactory(
-                new PropertyValueFactory<>("nome")
-        );
-
-        // PRODUTO
-        IdProduto.setCellValueFactory(
-                new PropertyValueFactory<>("id")
-        );
-
-        NomeProduto.setCellValueFactory(
-                new PropertyValueFactory<>("nome")
-        );
-
-        TipoProduto.setCellValueFactory(
-                new PropertyValueFactory<>("tipo")
-        );
-
-        QuantProduto.setCellValueFactory(
-                new PropertyValueFactory<>("quantidade")
-        );
-
-        carregarTabelas();
+        btnEditar.setOnAction(e -> editarItemSelecionado());
+        btnExcluir.setOnAction(e -> excluirRegistroSelecionado());
     }
 
-
-    private void carregarTabelas() {
-
-        tabelaFuncionario.setItems(
-                FXCollections.observableArrayList(
-                        funcionario1.listarTodos()
-                )
-        );
-
-        tabelaCliente.setItems(
-                FXCollections.observableArrayList(
-                        cliente1.listarTodos()
-                )
-        );
-
-        tabelaProduto.setItems(
-                FXCollections.observableArrayList(
-                        produto1.listarTodos()
-                )
-        );
+    private void configurarColunas() {
+        colIdRegistro.setCellValueFactory(data -> data.getValue().idRegistroProperty().asObject());
+        colFuncionario.setCellValueFactory(data -> data.getValue().nomeFuncionarioProperty());
+        colProduto.setCellValueFactory(data -> data.getValue().nomeProdutoProperty());
+        colTipoProduto.setCellValueFactory(data -> data.getValue().tipoProdutoProperty());
+        colQuantidade.setCellValueFactory(data -> data.getValue().quantidadeProperty().asObject());
+        colDataRegistro.setCellValueFactory(data -> data.getValue().dataRegistroProperty());
     }
 
+    private void carregarDados() {
+        dados.clear();
 
+        List<Registro> registros = registroDAO.listarTodos();
+
+        for (Registro r : registros) {
+            Produto produto = produtoDAO.buscarPorId(r.getIdProduto());
+            Funcionario funcionario = funcionarioDAO.buscarPorId(r.getIdFuncionario());
+
+            String nomeProduto = produto != null ? produto.getNomeProduto() : "—";
+            String tipoProduto = produto != null ? produto.getTipoProduto() : "—";
+            int quantidade = produto != null ? produto.getQuantidadeProduto() : 0;
+            String nomeFuncionario = funcionario != null ? funcionario.getNomeFuncionario() : "—";
+
+            dados.add(new RegistroView(
+                    r.getIdRegistro(),
+                    nomeFuncionario,
+                    nomeProduto,
+                    tipoProduto,
+                    quantidade,
+                    r.getDataRegistro()
+            ));
+        }
+
+        tableView.setItems(dados);
+    }
+
+    private void editarItemSelecionado() {
+        RegistroView selecionado = tableView.getSelectionModel().getSelectedItem();
+        if (selecionado == null) return;
+
+        // Abre um DatePicker em um diálogo para o usuário escolher a nova data
+        Dialog<LocalDate> dialog = new Dialog<>();
+        dialog.setTitle("Editar Data do Registro");
+        dialog.setHeaderText("Alterar a data do registro #" + selecionado.getIdRegistro());
+
+        ButtonType btnConfirmar = new ButtonType("Confirmar", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnConfirmar, ButtonType.CANCEL);
+
+        DatePicker datePicker = new DatePicker(selecionado.getDataRegistro());
+        dialog.getDialogPane().setContent(datePicker);
+
+        dialog.setResultConverter(botao -> {
+            if (botao == btnConfirmar) {
+                return datePicker.getValue();
+            }
+            return null;
+        });
+
+        Optional<LocalDate> resultado = dialog.showAndWait();
+        resultado.ifPresent(novaData -> {
+            try {
+                registroDAO.atualizarData(selecionado.getIdRegistro(), novaData);
+                selecionado.setDataRegistro(novaData);
+                tableView.refresh();
+                mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Data atualizada com sucesso!");
+            } catch (Exception e) {
+                mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Erro ao atualizar data: " + e.getMessage());
+            }
+        });
+    }
+
+    private void excluirRegistroSelecionado() {
+        RegistroView selecionado = tableView.getSelectionModel().getSelectedItem();
+        if (selecionado == null) return;
+
+        Alert confirmacao = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacao.setTitle("Confirmar exclusão");
+        confirmacao.setHeaderText(null);
+        confirmacao.setContentText("Deseja excluir o registro #" + selecionado.getIdRegistro() + "?");
+
+        Optional<ButtonType> resposta = confirmacao.showAndWait();
+        if (resposta.isPresent() && resposta.get() == ButtonType.OK) {
+            try {
+                registroDAO.deletar(selecionado.getIdRegistro());
+                dados.remove(selecionado);
+                mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Registro excluído com sucesso!");
+            } catch (Exception e) {
+                mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Erro ao excluir registro: " + e.getMessage());
+            }
+        }
+    }
 
     @FXML
     private void voltarMenu() {
         try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                    getClass().getResource("/Tela_Menu.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Tela_Menu.fxml"));
+            Parent root = loader.load();
 
-            javafx.scene.Parent root = loader.load();
+            Stage stage = (Stage) tableView.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
 
-            javafx.stage.Stage stage =
-                    (javafx.stage.Stage) btn_Voltar.getScene().getWindow();
-
-            stage.setScene(new javafx.scene.Scene(root));
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro de navegação", "Não foi possível voltar ao menu: " + e.getMessage());
         }
+    }
+
+    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensagem) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 }

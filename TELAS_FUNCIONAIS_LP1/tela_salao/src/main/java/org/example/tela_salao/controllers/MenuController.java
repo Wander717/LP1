@@ -1,105 +1,142 @@
 package org.example.tela_salao.controllers;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
-import org.example.tela_salao.DAOs.*;
-import org.example.tela_salao.entidades.*;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import org.example.tela_salao.DAOs.FuncionarioDAO;
+import org.example.tela_salao.DAOs.ProdutoDAO;
+import org.example.tela_salao.DAOs.RegistroDAO;
+import org.example.tela_salao.entidades.Funcionario;
+import org.example.tela_salao.entidades.Produto;
+import org.example.tela_salao.entidades.Registro;
 
-public class MenuController {
+import java.io.IOException;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.ResourceBundle;
 
-    @FXML
-    private TextField txt_NomeFuncionario;
+public class MenuController implements Initializable {
 
-    @FXML
-    private TextField txt_NomeCliente;
+    @FXML private TextField txtProduto;
+    @FXML private TextField txtTipoProduto;
+    @FXML private Spinner<Integer> spinQuantidade;
+    @FXML private ComboBox<Funcionario> cbSelecionarFuncionario;
+    @FXML private DatePicker dateDataRegistro;
 
-    @FXML
-    private TextField txt_Produto;
+    private final FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
+    private final ProdutoDAO produtoDAO = new ProdutoDAO();
+    private final RegistroDAO registroDAO = new RegistroDAO();
 
-    @FXML
-    private TextField txt_TipoProduto;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Configura o Spinner de quantidade (mín 1, máx 9999, valor inicial 1)
+        spinQuantidade.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9999, 1)
+        );
 
-    @FXML
-    private Spinner<Integer> spin_Quantidade;
+        // Carrega os funcionários no ComboBox
+        carregarFuncionarios();
 
-    @FXML
-    private Button btn_Cadastrar;
+        // Exibe o nome do funcionário no ComboBox
+        cbSelecionarFuncionario.setConverter(new StringConverter<Funcionario>() {
+            @Override
+            public String toString(Funcionario f) {
+                return f != null ? f.getNomeFuncionario() : "";
+            }
 
-    @FXML
-    private Button btn_Tabela;
+            @Override
+            public Funcionario fromString(String s) {
+                return null;
+            }
+        });
+    }
 
-    private RegistroDAO registroDAO = new RegistroDAO();
-    private FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
-    private ProdutoDAO produtoDAO = new ProdutoDAO();
-
-    @FXML
-    public void initialize() {
-        SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 1);
-
-        spin_Quantidade.setValueFactory(valueFactory);
+    private void carregarFuncionarios() {
+        List<Funcionario> funcionarios = funcionarioDAO.listarTodos();
+        cbSelecionarFuncionario.setItems(FXCollections.observableArrayList(funcionarios));
     }
 
     @FXML
     private void cadastrarTudo() {
+        // Validações
+        if (txtProduto.getText().isBlank()) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Campo obrigatório", "Informe o nome do produto.");
+            return;
+        }
+        if (txtTipoProduto.getText().isBlank()) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Campo obrigatório", "Informe o tipo do produto.");
+            return;
+        }
+        if (cbSelecionarFuncionario.getValue() == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Campo obrigatório", "Selecione um funcionário.");
+            return;
+        }
+        if (dateDataRegistro.getValue() == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Campo obrigatório", "Informe a data do registro.");
+            return;
+        }
 
-        String nomeFuncionario = txt_NomeFuncionario.getText();
-        String nomeCliente = txt_NomeCliente.getText();
-        String nomeProduto = txt_Produto.getText();
-        String tipoProduto = txt_TipoProduto.getText();
+        try {
+            // Cadastra o produto
+            Produto produto = new Produto(
+                    txtProduto.getText().trim(),
+                    txtTipoProduto.getText().trim(),
+                    spinQuantidade.getValue()
+            );
+            produtoDAO.inserir(produto);
 
-        Integer quantidadeProduto = spin_Quantidade.getValue();
+            // Cria o registro vinculando produto e funcionário
+            Funcionario funcionarioSelecionado = cbSelecionarFuncionario.getValue();
+            LocalDate data = dateDataRegistro.getValue();
 
-        Funcionario funcionario1 = new Funcionario();
-        Registro registro1 = new Registro();
-        Produto produto1 = new Produto();
+            Registro registro = new Registro(data, produto.getIdProduto(), funcionarioSelecionado.getIdFuncionario());
+            registroDAO.inserir(registro);
 
-        funcionario1.setNome(nomeFuncionario);
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Cadastro realizado com sucesso!");
+            limparCampos();
 
-        registro1.setNome(nomeCliente);
-
-        produto1.setNome(nomeProduto);
-        produto1.setTipo(tipoProduto);
-        produto1.setQuantidade(quantidadeProduto);
-
-        funcionarioDAO.salvar(funcionario1);
-        registroDAO.salvar(registro1);
-        produtoDAO.salvar(produto1);
-
-        System.out.println("Tudo salvo com sucesso!");
-
-        limparCampos();
+        } catch (Exception e) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Erro ao cadastrar: " + e.getMessage());
+        }
     }
-
 
     @FXML
     private void IrparaTabela() {
         try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                    getClass().getResource("/Tela_Tabela.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Tela_Tabela.fxml"));
+            Parent root = loader.load();
 
-            javafx.scene.Parent root = loader.load();
+            Stage stage = (Stage) txtProduto.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
 
-            javafx.stage.Stage stage = (javafx.stage.Stage) btn_Tabela.getScene().getWindow();
-            stage.setScene(new javafx.scene.Scene(root));
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro de navegação", "Não foi possível abrir a tabela: " + e.getMessage());
         }
     }
 
     private void limparCampos() {
-        txt_NomeFuncionario.clear();
-        txt_NomeCliente.clear();
-        txt_Produto.clear();
-        txt_TipoProduto.clear();
-        spin_Quantidade.getValueFactory().setValue(1);
+        txtProduto.clear();
+        txtTipoProduto.clear();
+        spinQuantidade.getValueFactory().setValue(1);
+        cbSelecionarFuncionario.setValue(null);
+        dateDataRegistro.setValue(null);
     }
 
-    private void mostrarAlerta(String titulo, String mensagem) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensagem) {
+        Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensagem);
