@@ -1,32 +1,46 @@
 package org.example.tela_salao.entidades;
 
 public class Produto {
-    // Atributos baseados nas colunas da tabela 'produto'
-    private int id;
-    private String nome;
-    private String tipo;
-    private int quantidade;
 
-    //CONSTRUTOR
-    public Produto(int id, String nome, String tipo, int quantidade) {
-        this.id = id;
-        this.nome = nome;
-        this.tipo = tipo;
-        this.quantidade = quantidade;
-    }
+    private int idProduto;
+    private String nomeProduto;
+    private String tipoProduto;
+    private int quantidadeProduto;
 
-    //CONSTRUTOR VAZIO
     public Produto() {}
 
-    //GETTERS
-    public int getId() {return id;}
-    public String getNome() {return nome;}
-    public String getTipo() {return tipo;}
-    public int getQuantidade() {return quantidade;}
+    public Produto(int idProduto, String nomeProduto, String tipoProduto, int quantidadeProduto) {
+        this.idProduto = idProduto;
+        this.nomeProduto = nomeProduto;
+        this.tipoProduto = tipoProduto;
+        this.quantidadeProduto = quantidadeProduto;
+    }
 
-    //SETTERS
-    public void setId(int id) {this.id = id;}
-    public void setNome(String nome) {this.nome = nome;}
-    public void setTipo(String tipo) {this.tipo = tipo;}
-    public void setQuantidade(int quantidade) {this.quantidade = quantidade;}
+    public Produto(String nomeProduto, String tipoProduto, int quantidadeProduto) {
+        this.nomeProduto = nomeProduto;
+        this.tipoProduto = tipoProduto;
+        this.quantidadeProduto = quantidadeProduto;
+    }
+
+    public int getIdProduto() { return idProduto; }
+    public void setIdProduto(int idProduto) { this.idProduto = idProduto; }
+
+    public String getNomeProduto() { return nomeProduto; }
+    public void setNomeProduto(String nomeProduto) { this.nomeProduto = nomeProduto; }
+
+    public String getTipoProduto() { return tipoProduto; }
+    public void setTipoProduto(String tipoProduto) { this.tipoProduto = tipoProduto; }
+
+    public int getQuantidadeProduto() { return quantidadeProduto; }
+    public void setQuantidadeProduto(int quantidadeProduto) { this.quantidadeProduto = quantidadeProduto; }
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "idProduto=" + idProduto +
+                ", nomeProduto='" + nomeProduto + '\'' +
+                ", tipoProduto='" + tipoProduto + '\'' +
+                ", quantidadeProduto=" + quantidadeProduto +
+                '}';
+    }
 }

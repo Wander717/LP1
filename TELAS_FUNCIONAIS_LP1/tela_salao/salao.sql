@@ -1,26 +1,24 @@
 CREATE DATABASE salao;
 
 USE salao;
-
-CREATE TABLE cliente (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(40) NOT NULL,
-    sexo VARCHAR(10) NOT NULL,
-    idade INT(5) NOT NULL
-    );
     
 CREATE TABLE produto (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(50) NOT NULL,
-    tipo VARCHAR (20) NOT NULL,
-    quantidade INT(20) NOT NULL
+	id_produto INT AUTO_INCREMENT PRIMARY KEY,
+    nome_produto VARCHAR(50) NOT NULL,
+    tipo_produto VARCHAR (20) NOT NULL,
+    quantidade_produto INT(20) NOT NULL
 );
 
 CREATE TABLE funcionario (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR (40) NOT NULL,
-    sexo VARCHAR (10) NOT NULL,
-    cargo VARCHAR (20) NOT NULL,
-    idade int (5) NOT NULL
+	id_funcionario INT AUTO_INCREMENT PRIMARY KEY,
+    nome_funcionario VARCHAR (40) NOT NULL
 );
     
+CREATE TABLE registro (
+id_registro INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+data_registro DATE,
+id_produto INT NOT NULL,
+id_funcionario INT NOT NULL,
+CONSTRAINT fk_registro_produto FOREIGN KEY (id_produto) REFERENCES produto(id_produto),
+CONSTRAINT fk_registro_funcionario FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_funcionario)
+);

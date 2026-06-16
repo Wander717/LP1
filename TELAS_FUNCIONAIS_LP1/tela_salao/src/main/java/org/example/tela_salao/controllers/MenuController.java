@@ -6,8 +6,6 @@ import javafx.scene.control.SpinnerValueFactory;
 import org.example.tela_salao.DAOs.*;
 import org.example.tela_salao.entidades.*;
 
-import java.sql.SQLException;
-
 public class MenuController {
 
     @FXML
@@ -31,7 +29,7 @@ public class MenuController {
     @FXML
     private Button btn_Tabela;
 
-    private ClienteDAO clienteDAO = new ClienteDAO();
+    private RegistroDAO registroDAO = new RegistroDAO();
     private FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
     private ProdutoDAO produtoDAO = new ProdutoDAO();
 
@@ -54,19 +52,19 @@ public class MenuController {
         Integer quantidadeProduto = spin_Quantidade.getValue();
 
         Funcionario funcionario1 = new Funcionario();
-        Cliente cliente1 = new Cliente();
+        Registro registro1 = new Registro();
         Produto produto1 = new Produto();
 
         funcionario1.setNome(nomeFuncionario);
 
-        cliente1.setNome(nomeCliente);
+        registro1.setNome(nomeCliente);
 
         produto1.setNome(nomeProduto);
         produto1.setTipo(tipoProduto);
         produto1.setQuantidade(quantidadeProduto);
 
         funcionarioDAO.salvar(funcionario1);
-        clienteDAO.salvar(cliente1);
+        registroDAO.salvar(registro1);
         produtoDAO.salvar(produto1);
 
         System.out.println("Tudo salvo com sucesso!");

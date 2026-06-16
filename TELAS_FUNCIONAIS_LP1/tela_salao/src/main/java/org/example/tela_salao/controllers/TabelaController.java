@@ -1,14 +1,13 @@
 package org.example.tela_salao.controllers;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.example.tela_salao.DAOs.ClienteDAO;
+import org.example.tela_salao.DAOs.RegistroDAO;
 import org.example.tela_salao.DAOs.FuncionarioDAO;
 import org.example.tela_salao.DAOs.ProdutoDAO;
-import org.example.tela_salao.entidades.Cliente;
+import org.example.tela_salao.entidades.Registro;
 import org.example.tela_salao.entidades.Funcionario;
 import org.example.tela_salao.entidades.Produto;
 
@@ -27,13 +26,13 @@ public class TabelaController {
 // CLIENTE
 
     @FXML
-    private TableView<Cliente> tabelaCliente;
+    private TableView<Registro> tabelaCliente;
 
     @FXML
-    private TableColumn<Cliente, Integer> IdCliente;
+    private TableColumn<Registro, Integer> IdCliente;
 
     @FXML
-    private TableColumn<Cliente, String> NomeCliente;
+    private TableColumn<Registro, String> NomeCliente;
 
 
 // PRODUTO
@@ -58,7 +57,7 @@ public class TabelaController {
     private Button btn_Voltar;
 
 
-    private ClienteDAO cliente1 = new ClienteDAO();
+    private RegistroDAO cliente1 = new RegistroDAO();
     private FuncionarioDAO funcionario1 = new FuncionarioDAO();
     private ProdutoDAO produto1 = new ProdutoDAO();
 
