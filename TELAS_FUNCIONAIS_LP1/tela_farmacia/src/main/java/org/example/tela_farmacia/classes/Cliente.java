@@ -1,4 +1,4 @@
-package org.example.tela_farmacia.entities;
+package org.example.tela_farmacia.classes;
 
 public class Cliente {
 

@@ -1,10 +1,7 @@
-package org.example.tela_farmacia.dao;
+package org.example.tela_farmacia.DAOs;
 
 import org.example.tela_farmacia.DatabaseConnection;
-import org.example.tela_farmacia.entities.Cliente;
-import org.example.tela_farmacia.entities.Funcionario;
-import org.example.tela_farmacia.entities.Registro;
-import org.example.tela_farmacia.entities.Remedio;
+import org.example.tela_farmacia.classes.Registro;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,8 +9,21 @@ import java.util.List;
 
 public class RegistroDAO {
 
+    private static final String SQL_SELECT = """
+            SELECT
+                r.id_registro,
+                r.id_cliente,     c.nome_cliente,     c.idade_cliente,
+                r.id_remedio,     rm.nome_remedio,    rm.tipo_remedio,
+                r.id_funcionario, f.nome_funcionario,
+                r.quantidade
+            FROM registro r
+            JOIN cliente     c  ON c.id_cliente     = r.id_cliente
+            JOIN remedio     rm ON rm.id_remedio     = r.id_remedio
+            JOIN funcionario f  ON f.id_funcionario  = r.id_funcionario
+            """;
+
     // -------------------------------------------------------------------------
-    // INSERT — recebe um Registro já com Cliente, Remedio e Funcionario populados
+    // INSERT
     // -------------------------------------------------------------------------
     public int inserir(Registro registro) throws SQLException {
         String sql = "INSERT INTO registro (id_cliente, id_remedio, id_funcionario, quantidade) VALUES (?, ?, ?, ?)";
@@ -21,9 +31,9 @@ public class RegistroDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setInt(1, registro.getCliente().getId_cliente());
-            ps.setInt(2, registro.getRemedio().getId_remedio());
-            ps.setInt(3, registro.getFuncionario().getId_funcionario());
+            ps.setInt(1, registro.getId_cliente());
+            ps.setInt(2, registro.getId_remedio());
+            ps.setInt(3, registro.getId_funcionario());
             ps.setInt(4, registro.getQuantidade());
             ps.executeUpdate();
 
@@ -39,22 +49,22 @@ public class RegistroDAO {
     }
 
     // -------------------------------------------------------------------------
-    // SELECT ALL — JOIN nas três tabelas para montar objetos completos
+    // SELECT ALL
     // -------------------------------------------------------------------------
     public List<Registro> listarTodos() throws SQLException {
         String sql = """
-                SELECT
-                    r.id_registro,
-                    r.quantidade,
-                    c.id_cliente,    c.nome_cliente,    c.idade_cliente,
-                    rm.id_remedio,   rm.nome_remedio,   rm.tipo_remedio,
-                    f.id_funcionario, f.nome_funcionario, f.cargo_funcionario
-                FROM registro r
-                JOIN cliente     c  ON c.id_cliente     = r.id_cliente
-                JOIN remedio     rm ON rm.id_remedio     = r.id_remedio
-                JOIN funcionario f  ON f.id_funcionario  = r.id_funcionario
-                ORDER BY r.id_registro
-                """;
+            SELECT
+                r.id_registro,
+                r.id_cliente,     c.nome_cliente,     c.idade_cliente,
+                r.id_remedio,     rm.nome_remedio,    rm.tipo_remedio,
+                r.id_funcionario, f.nome_funcionario,
+                r.quantidade
+            FROM registro r
+            JOIN cliente     c  ON c.id_cliente     = r.id_cliente
+            JOIN remedio     rm ON rm.id_remedio     = r.id_remedio
+            JOIN funcionario f  ON f.id_funcionario  = r.id_funcionario
+            ORDER BY r.id_registro
+            """;
 
         List<Registro> lista = new ArrayList<>();
 
@@ -63,29 +73,26 @@ public class RegistroDAO {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                lista.add(mapearRegistro(rs));
+                lista.add(mapear(rs));
             }
         }
         return lista;
     }
 
-    // -------------------------------------------------------------------------
-    // SELECT BY ID
-    // -------------------------------------------------------------------------
     public Registro buscarPorId(int id_registro) throws SQLException {
         String sql = """
-                SELECT
-                    r.id_registro,
-                    r.quantidade,
-                    c.id_cliente,    c.nome_cliente,    c.idade_cliente,
-                    rm.id_remedio,   rm.nome_remedio,   rm.tipo_remedio,
-                    f.id_funcionario, f.nome_funcionario, f.cargo_funcionario
-                FROM registro r
-                JOIN cliente     c  ON c.id_cliente     = r.id_cliente
-                JOIN remedio     rm ON rm.id_remedio     = r.id_remedio
-                JOIN funcionario f  ON f.id_funcionario  = r.id_funcionario
-                WHERE r.id_registro = ?
-                """;
+            SELECT
+                r.id_registro,
+                r.id_cliente,     c.nome_cliente,     c.idade_cliente,
+                r.id_remedio,     rm.nome_remedio,    rm.tipo_remedio,
+                r.id_funcionario, f.nome_funcionario,
+                r.quantidade
+            FROM registro r
+            JOIN cliente     c  ON c.id_cliente     = r.id_cliente
+            JOIN remedio     rm ON rm.id_remedio     = r.id_remedio
+            JOIN funcionario f  ON f.id_funcionario  = r.id_funcionario
+            WHERE r.id_registro = ?
+            """;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -93,34 +100,25 @@ public class RegistroDAO {
             ps.setInt(1, id_registro);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return mapearRegistro(rs);
-                }
+                if (rs.next()) return mapear(rs);
             }
         }
         return null;
     }
 
+
     // -------------------------------------------------------------------------
-    // UPDATE
+    // UPDATE — atualiza apenas a quantidade (as demais colunas são FKs)
     // -------------------------------------------------------------------------
-    public boolean atualizar(Registro registro) throws SQLException {
-        String sql = """
-                UPDATE registro
-                SET id_cliente = ?, id_remedio = ?, id_funcionario = ?, quantidade = ?
-                WHERE id_registro = ?
-                """;
+    public void atualizarQuantidade(int id_registro, int novaQuantidade) throws SQLException {
+        String sql = "UPDATE registro SET quantidade = ? WHERE id_registro = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, registro.getCliente().getId_cliente());
-            ps.setInt(2, registro.getRemedio().getId_remedio());
-            ps.setInt(3, registro.getFuncionario().getId_funcionario());
-            ps.setInt(4, registro.getQuantidade());
-            ps.setInt(5, registro.getId_registro());
-
-            return ps.executeUpdate() > 0;
+            ps.setInt(1, novaQuantidade);
+            ps.setInt(2, id_registro);
+            ps.executeUpdate();
         }
     }
 
@@ -139,33 +137,24 @@ public class RegistroDAO {
     }
 
     // -------------------------------------------------------------------------
-    // Método auxiliar — monta um Registro a partir do ResultSet atual
+    // MAPPER — monta um Registro completo a partir do ResultSet
     // -------------------------------------------------------------------------
-    private Registro mapearRegistro(ResultSet rs) throws SQLException {
-        Cliente cliente = new Cliente(
-                rs.getInt("id_cliente"),
-                rs.getString("nome_cliente"),
-                rs.getInt("idade_cliente")
-        );
-
-        Remedio remedio = new Remedio(
-                rs.getInt("id_remedio"),
-                rs.getString("nome_remedio"),
-                rs.getString("tipo_remedio")
-        );
-
-        Funcionario funcionario = new Funcionario(
-                rs.getInt("id_funcionario"),
-                rs.getString("nome_funcionario"),
-                rs.getString("cargo_funcionario")
-        );
-
-        return new Registro(
+    private Registro mapear(ResultSet rs) throws SQLException {
+        Registro reg = new Registro(
                 rs.getInt("id_registro"),
-                cliente,
-                remedio,
-                funcionario,
+                rs.getString("nome_cliente"),
+                rs.getInt("idade_cliente"),
+                rs.getString("nome_remedio"),
+                rs.getString("tipo_remedio"),
+                rs.getString("nome_funcionario"),
                 rs.getInt("quantidade")
         );
+
+        // IDs das entidades relacionadas — necessários para UPDATE via DAOs auxiliares
+        reg.setId_cliente(rs.getInt("id_cliente"));
+        reg.setId_remedio(rs.getInt("id_remedio"));
+        reg.setId_funcionario(rs.getInt("id_funcionario"));
+
+        return reg;
     }
 }

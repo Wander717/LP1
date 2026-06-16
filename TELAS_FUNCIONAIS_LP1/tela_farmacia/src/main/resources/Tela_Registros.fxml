@@ -6,28 +6,44 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="816.0" prefWidth="1327.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.tela_farmacia.controllers.RegistrosController">
-   <children>
-      <Label layoutX="588.0" layoutY="33.0" text="Registros" underline="true">
-         <font>
-            <Font name="System Bold" size="33.0" />
-         </font>
-      </Label>
-      <TableView fx:id="tabela_Registros" layoutY="135.0" prefHeight="576.0" prefWidth="1327.0">
-        <columns>
-          <TableColumn fx:id="col_IdRegistro" prefWidth="88.0" text="Id" />
-          <TableColumn fx:id="col_NomeCliente" prefWidth="300.0" text="Cliente" />
-            <TableColumn fx:id="col_IdadeCliente" prefWidth="92.0" text="Idade" />
-            <TableColumn fx:id="col_NomeRemedio" prefWidth="380.0" text="Remédio" />
-            <TableColumn fx:id="col_TipoRemedio" prefWidth="116.0" text="Tipo" />
-            <TableColumn fx:id="col_QuantRemedio" prefWidth="74.0" text="Quant" />
-            <TableColumn fx:id="col_NomeFuncionario" prefWidth="276.0" text="Funcionário responsável" />
-        </columns>
-      </TableView>
-      <Button fx:id="btnVoltarMenu" layoutX="29.0" layoutY="737.0" mnemonicParsing="false" onAction="#voltarMenu" prefHeight="49.0" prefWidth="145.0" text="Voltar ao Menu" />
-      <Button fx:id="btnEditar" layoutX="710.0" layoutY="736.0" mnemonicParsing="false" onAction="#editarLinhaSelecionada" text="Editar Selecionado" />
-      <Button fx:id="btnExcluir" layoutX="326.0" layoutY="736.0" mnemonicParsing="false" onAction="#excluirLinhaSelecionada" text="Excluir selecionado" />
-      <Button fx:id="btnSalvar" layoutX="1124.0" layoutY="736.0" mnemonicParsing="false" onAction="#salvarAlteracoes" text="Salvar " />
-   </children>
+<AnchorPane prefHeight="816.0" prefWidth="1328.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.tela_farmacia.controllers.RegistrosController">
+    <children>
+        <Label text="Registros" underline="true"
+               AnchorPane.topAnchor="35.0"
+               AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="0.0"
+               alignment="CENTER" maxWidth="Infinity">
+            <font><Font name="System Bold" size="33.0" /></font>
+        </Label>
+
+        <TableView fx:id="tabela_Registros" AnchorPane.bottomAnchor="99.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="135.0">
+            <columns>
+                <TableColumn fx:id="col_IdRegistro"      prefWidth="88.0"  text="Id" />
+                <TableColumn fx:id="col_NomeCliente"     prefWidth="300.0" text="Cliente" />
+                <TableColumn fx:id="col_IdadeCliente"    prefWidth="92.0"  text="Idade" />
+                <TableColumn fx:id="col_NomeRemedio"     prefWidth="380.0" text="Remédio" />
+                <TableColumn fx:id="col_TipoRemedio"     prefWidth="116.0" text="Tipo" />
+                <TableColumn fx:id="col_QuantRemedio"    prefWidth="74.0"  text="Quant" />
+                <TableColumn fx:id="col_NomeFuncionario" prefWidth="277.0" text="Funcionário responsável" />
+            </columns>
+        </TableView>
+
+        <HBox AnchorPane.bottomAnchor="30.0"
+              AnchorPane.leftAnchor="30.0"
+              AnchorPane.rightAnchor="30.0"
+              alignment="CENTER"
+              spacing="0">
+
+            <Button fx:id="btn_VoltarMenu"         mnemonicParsing="false" onAction="#voltarMenu"              prefHeight="40.0" prefWidth="160.0" text="⬅ Voltar ao Menu" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btn_EditarSelecionado"  mnemonicParsing="false" onAction="#editarLinhaSelecionada"  prefHeight="40.0" prefWidth="160.0" text="🛠 Editar Selecionado" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btn_ExcluirSelecionado" mnemonicParsing="false" onAction="#excluirLinhaSelecionada" prefHeight="40.0" prefWidth="160.0" text="🗑 Excluir selecionado" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btn_Salvar"             mnemonicParsing="false" onAction="#salvarAlteracoes"        prefHeight="40.0" prefWidth="160.0" text="💾 Salvar" />
+        </HBox>
+    </children>
 </AnchorPane>

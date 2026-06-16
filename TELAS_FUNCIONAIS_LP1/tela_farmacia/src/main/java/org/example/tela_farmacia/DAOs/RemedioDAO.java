@@ -1,7 +1,7 @@
-package org.example.tela_farmacia.dao;
+package org.example.tela_farmacia.DAOs;
 
 import org.example.tela_farmacia.DatabaseConnection;
-import org.example.tela_farmacia.entities.Remedio;
+import org.example.tela_farmacia.classes.Remedio;
 
 import java.sql.*;
 import java.util.ArrayList;
