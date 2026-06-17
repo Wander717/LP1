@@ -9,19 +9,6 @@ import java.util.List;
 
 public class RegistroDAO {
 
-    private static final String SQL_SELECT = """
-            SELECT
-                r.id_registro,
-                r.id_cliente,     c.nome_cliente,     c.idade_cliente,
-                r.id_remedio,     rm.nome_remedio,    rm.tipo_remedio,
-                r.id_funcionario, f.nome_funcionario,
-                r.quantidade
-            FROM registro r
-            JOIN cliente     c  ON c.id_cliente     = r.id_cliente
-            JOIN remedio     rm ON rm.id_remedio     = r.id_remedio
-            JOIN funcionario f  ON f.id_funcionario  = r.id_funcionario
-            """;
-
     // -------------------------------------------------------------------------
     // INSERT
     // -------------------------------------------------------------------------
@@ -108,7 +95,7 @@ public class RegistroDAO {
 
 
     // -------------------------------------------------------------------------
-    // UPDATE — atualiza apenas a quantidade (as demais colunas são FKs)
+    // ATUALIZA SOMENTE A QUANTIDADE
     // -------------------------------------------------------------------------
     public void atualizarQuantidade(int id_registro, int novaQuantidade) throws SQLException {
         String sql = "UPDATE registro SET quantidade = ? WHERE id_registro = ?";

@@ -34,53 +34,6 @@ public class ClienteDAO {
     }
 
     // -------------------------------------------------------------------------
-    // SELECT ALL
-    // -------------------------------------------------------------------------
-    public List<Cliente> listarTodos() throws SQLException {
-        String sql = "SELECT id_cliente, nome_cliente, idade_cliente FROM cliente";
-        List<Cliente> lista = new ArrayList<>();
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                Cliente c = new Cliente(
-                        rs.getInt("id_cliente"),
-                        rs.getString("nome_cliente"),
-                        rs.getInt("idade_cliente")
-                );
-                lista.add(c);
-            }
-        }
-        return lista;
-    }
-
-    // -------------------------------------------------------------------------
-    // SELECT BY ID
-    // -------------------------------------------------------------------------
-    public Cliente buscarPorId(int id_cliente) throws SQLException {
-        String sql = "SELECT id_cliente, nome_cliente, idade_cliente FROM cliente WHERE id_cliente = ?";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, id_cliente);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return new Cliente(
-                            rs.getInt("id_cliente"),
-                            rs.getString("nome_cliente"),
-                            rs.getInt("idade_cliente")
-                    );
-                }
-            }
-        }
-        return null;
-    }
-
-    // -------------------------------------------------------------------------
     // UPDATE
     // -------------------------------------------------------------------------
     public boolean atualizar(Cliente cliente) throws SQLException {
@@ -97,17 +50,4 @@ public class ClienteDAO {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // DELETE
-    // -------------------------------------------------------------------------
-    public boolean deletar(int id_cliente) throws SQLException {
-        String sql = "DELETE FROM cliente WHERE id_cliente = ?";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, id_cliente);
-            return ps.executeUpdate() > 0;
-        }
-    }
 }
