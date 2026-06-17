@@ -10,7 +10,7 @@ import java.util.List;
 
 public class RegistroDAO {
 
-    // CREATE
+    //INSERE O REGISTRO NA TABELA
     public void inserir(Registro registro) {
         String sql = "INSERT INTO registro (data_registro, id_produto, id_funcionario) VALUES (?, ?, ?)";
 
@@ -34,7 +34,7 @@ public class RegistroDAO {
         }
     }
 
-    // READ - buscar por ID
+    //BUSCA POR ID
     public Registro buscarPorId(int idRegistro) {
         String sql = "SELECT * FROM registro WHERE id_registro = ?";
 
@@ -56,7 +56,7 @@ public class RegistroDAO {
         return null;
     }
 
-    // READ - listar todos
+    //LISTA TODOS OS REGISTROS
     public List<Registro> listarTodos() {
         String sql = "SELECT * FROM registro";
         List<Registro> registros = new ArrayList<>();
@@ -76,7 +76,7 @@ public class RegistroDAO {
         return registros;
     }
 
-    // READ - listar por funcionário
+    //LISTA POR FUNCIONÁRIO
     public List<Registro> listarPorFuncionario(int idFuncionario) {
         String sql = "SELECT * FROM registro WHERE id_funcionario = ?";
         List<Registro> registros = new ArrayList<>();
@@ -99,7 +99,7 @@ public class RegistroDAO {
         return registros;
     }
 
-    // READ - listar por produto
+    //LISTA POR PRODUTO
     public List<Registro> listarPorProduto(int idProduto) {
         String sql = "SELECT * FROM registro WHERE id_produto = ?";
         List<Registro> registros = new ArrayList<>();
@@ -122,23 +122,7 @@ public class RegistroDAO {
         return registros;
     }
 
-    // UPDATE - apenas data_registro pode ser alterada
-    public void atualizarData(int idRegistro, LocalDate novaData) {
-        String sql = "UPDATE registro SET data_registro = ? WHERE id_registro = ?";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setDate(1, novaData != null ? Date.valueOf(novaData) : null);
-            stmt.setInt(2, idRegistro);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao atualizar data do registro: " + e.getMessage(), e);
-        }
-    }
-
-    // DELETE
+    //EXCLUI REGISTRO
     public void deletar(int idRegistro) {
         String sql = "DELETE FROM registro WHERE id_registro = ?";
 

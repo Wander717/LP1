@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ProdutoDAO {
 
-    // CREATE
+    //INSERE PRODUTO
     public void inserir(Produto produto) {
         String sql = "INSERT INTO produto (nome_produto, tipo_produto, quantidade_produto) VALUES (?, ?, ?)";
 
@@ -32,7 +32,7 @@ public class ProdutoDAO {
         }
     }
 
-    // READ - buscar por ID
+    //BUSCA PRODUTO POR ID
     public Produto buscarPorId(int idProduto) {
         String sql = "SELECT * FROM produto WHERE id_produto = ?";
 
@@ -54,7 +54,7 @@ public class ProdutoDAO {
         return null;
     }
 
-    // READ - listar todos
+    //LISTA TODOS OS PRODUTOS
     public List<Produto> listarTodos() {
         String sql = "SELECT * FROM produto";
         List<Produto> produtos = new ArrayList<>();
@@ -74,7 +74,7 @@ public class ProdutoDAO {
         return produtos;
     }
 
-    // UPDATE
+    //ATUALIZA O PRODUTO
     public void atualizar(Produto produto) {
         String sql = "UPDATE produto SET nome_produto = ?, tipo_produto = ?, quantidade_produto = ? WHERE id_produto = ?";
 
@@ -89,21 +89,6 @@ public class ProdutoDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar produto: " + e.getMessage(), e);
-        }
-    }
-
-    // DELETE
-    public void deletar(int idProduto) {
-        String sql = "DELETE FROM produto WHERE id_produto = ?";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, idProduto);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao deletar produto: " + e.getMessage(), e);
         }
     }
 

@@ -9,28 +9,7 @@ import java.util.List;
 
 public class FuncionarioDAO {
 
-    // CREATE
-    public void inserir(Funcionario funcionario) {
-        String sql = "INSERT INTO funcionario (nome_funcionario) VALUES (?)";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            stmt.setString(1, funcionario.getNomeFuncionario());
-            stmt.executeUpdate();
-
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    funcionario.setIdFuncionario(rs.getInt(1));
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao inserir funcionário: " + e.getMessage(), e);
-        }
-    }
-
-    // READ - buscar por ID
+    //BUSCA FUNCIONÁRIO POR ID
     public Funcionario buscarPorId(int idFuncionario) {
         String sql = "SELECT * FROM funcionario WHERE id_funcionario = ?";
 
@@ -52,7 +31,7 @@ public class FuncionarioDAO {
         return null;
     }
 
-    // READ - listar todos
+    //LISTA TODOS OS FUNCIONÁRIOS DA TABELA
     public List<Funcionario> listarTodos() {
         String sql = "SELECT * FROM funcionario";
         List<Funcionario> funcionarios = new ArrayList<>();
@@ -72,7 +51,7 @@ public class FuncionarioDAO {
         return funcionarios;
     }
 
-    // UPDATE
+    //ATUALIZA
     public void atualizar(Funcionario funcionario) {
         String sql = "UPDATE funcionario SET nome_funcionario = ? WHERE id_funcionario = ?";
 
@@ -85,21 +64,6 @@ public class FuncionarioDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar funcionário: " + e.getMessage(), e);
-        }
-    }
-
-    // DELETE
-    public void deletar(int idFuncionario) {
-        String sql = "DELETE FROM funcionario WHERE id_funcionario = ?";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, idFuncionario);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao deletar funcionário: " + e.getMessage(), e);
         }
     }
 
