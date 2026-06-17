@@ -1,7 +1,6 @@
+// PedidoDAO.java
 package org.example.tela_barraquinha.DAOS;
 
-import org.example.tela_barraquinha.DAOS.ClienteDAO;
-import org.example.tela_barraquinha.DAOS.FrutaDAO;
 import org.example.tela_barraquinha.DataBaseConnector;
 import org.example.tela_barraquinha.classes.Pedido;
 
@@ -11,8 +10,8 @@ import java.util.List;
 
 public class PedidoDAO {
 
-    private final ClienteDAO clienteDAO     = new ClienteDAO();
-    private final FrutaDAO       frutaDAO       = new FrutaDAO();
+    private final ClienteDAO    clienteDAO    = new ClienteDAO();
+    private final FrutaDAO      frutaDAO      = new FrutaDAO();
 
     // ── CREATE ────────────────────────────────────────────────────────────────
 
@@ -45,6 +44,7 @@ public class PedidoDAO {
                        c.nome_cliente,
                        f.nome_fruta,
                        fn.nome_funcionario,
+                       fn.id_funcionario,
                        p.quantidade
                 FROM pedido p
                 JOIN cliente     c  ON c.id_cliente      = p.id_cliente
@@ -63,6 +63,7 @@ public class PedidoDAO {
                         rs.getString("nome_cliente"),
                         rs.getString("nome_fruta"),
                         rs.getString("nome_funcionario"),
+                        rs.getInt("id_funcionario"),
                         rs.getInt("quantidade")
                 ));
             }

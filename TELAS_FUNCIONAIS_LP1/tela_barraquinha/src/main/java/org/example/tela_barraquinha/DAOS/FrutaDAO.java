@@ -1,39 +1,12 @@
+// FrutaDAO.java
 package org.example.tela_barraquinha.DAOS;
 
 import org.example.tela_barraquinha.DataBaseConnector;
-import org.example.tela_barraquinha.classes.Fruta;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class FrutaDAO {
 
-    // ── CREATE ────────────────────────────────────────────────────────────────
-
-    public Fruta inserir(Fruta fruta) throws Exception {
-        String sql = "INSERT INTO fruta (nome_fruta) VALUES (?)";
-
-        try (Connection conn = DataBaseConnector.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            ps.setString(1, fruta.getNome_fruta());
-            ps.executeUpdate();
-
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    fruta.setId_fruta(rs.getInt(1));
-                }
-            }
-            return fruta;
-        }
-    }
-
-    /**
-     * Insere a fruta se não existir; devolve sempre o id.
-     * Usado pelo PedidoDAO ao cadastrar um pedido.
-     */
     public int inserirOuBuscarPorNome(String nomeFruta) throws Exception {
         String insertSql = "INSERT IGNORE INTO fruta (nome_fruta) VALUES (?)";
         String selectSql = "SELECT id_fruta FROM fruta WHERE nome_fruta = ?";
@@ -51,90 +24,5 @@ public class FrutaDAO {
             }
         }
         throw new SQLException("Não foi possível obter o id da fruta: " + nomeFruta);
-    }
-
-    // ── READ ──────────────────────────────────────────────────────────────────
-
-    public List<Fruta> listarTodas() throws Exception {
-        List<Fruta> lista = new ArrayList<>();
-        String sql = "SELECT id_fruta, nome_fruta FROM fruta ORDER BY nome_fruta";
-
-        try (Connection conn = DataBaseConnector.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                lista.add(new Fruta(
-                        rs.getInt("id_fruta"),
-                        rs.getString("nome_fruta")
-                ));
-            }
-        }
-        return lista;
-    }
-
-    public Optional<Fruta> buscarPorId(int idFruta) throws Exception {
-        String sql = "SELECT id_fruta, nome_fruta FROM fruta WHERE id_fruta = ?";
-
-        try (Connection conn = DataBaseConnector.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, idFruta);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return Optional.of(new Fruta(
-                            rs.getInt("id_fruta"),
-                            rs.getString("nome_fruta")
-                    ));
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
-    public Optional<Fruta> buscarPorNome(String nomeFruta) throws Exception {
-        String sql = "SELECT id_fruta, nome_fruta FROM fruta WHERE nome_fruta = ?";
-
-        try (Connection conn = DataBaseConnector.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, nomeFruta);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return Optional.of(new Fruta(
-                            rs.getInt("id_fruta"),
-                            rs.getString("nome_fruta")
-                    ));
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
-    // ── UPDATE ────────────────────────────────────────────────────────────────
-
-    public void atualizar(Fruta fruta) throws Exception {
-        String sql = "UPDATE fruta SET nome_fruta = ? WHERE id_fruta = ?";
-
-        try (Connection conn = DataBaseConnector.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, fruta.getNome_fruta());
-            ps.setInt(2, fruta.getId_fruta());
-            ps.executeUpdate();
-        }
-    }
-
-    // ── DELETE ────────────────────────────────────────────────────────────────
-
-    public void excluir(int idFruta) throws Exception {
-        String sql = "DELETE FROM fruta WHERE id_fruta = ?";
-
-        try (Connection conn = DataBaseConnector.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, idFruta);
-            ps.executeUpdate();
-        }
     }
 }
