@@ -1,3 +1,4 @@
+DROP DATABASE IF NOT EXISTS salao;
 CREATE DATABASE salao;
 
 USE salao;
